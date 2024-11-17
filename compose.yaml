@@ -1,0 +1,6 @@
+﻿services:
+  ocr:
+    image: ocr
+    build:
+      context: .
+      dockerfile: OCR/Dockerfile
