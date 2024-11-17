@@ -15,6 +15,29 @@ public class OcrController : ControllerBase
         _visionService = visionService;
         _logger = logger;
     }
+
+
+    [HttpGet]
+    public async Task<IActionResult> Test()
+    {
+        _logger.LogInformation("Test"); 
+        var fileName = "test-screen-shot.png";
+        var assetsFolder = "assets"; // Folder name
+        var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, assetsFolder, fileName);
+
+        try
+        {
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            var result = await _visionService.ReadFileFromBytesAsync(fileBytes);
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error reading file");
+            return BadRequest();
+        }
+        
+    }
     
     [HttpPost]
     public async Task<IActionResult> ReadFile([FromBody] byte[] file)

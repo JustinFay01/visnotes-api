@@ -11,7 +11,7 @@ public interface IVisionService
     /// <param name="file"></param>
     /// <returns></returns>
     Task<List<string>> ReadFileFromBytesAsync(byte[] file);
-    Task ReadFileFromUrlAsync(string url);
+    Task<List<string>> ReadFileFromUrlAsync(string url);
 }
 
 
@@ -47,8 +47,9 @@ public class VisionService: IVisionService
             .ToList();
     }
 
-    public Task ReadFileFromUrlAsync(string url)
+    public  Task<List<string>> ReadFileFromUrlAsync(string url)
     {
+        _logger.LogInformation("Reading file from url");
         throw new NotImplementedException();
     }
 }
