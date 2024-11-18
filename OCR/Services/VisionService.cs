@@ -22,7 +22,7 @@ public class VisionService: IVisionService
     private readonly ILogger<VisionService> _logger;
     private ComputerVisionClient _client;
     
-    public VisionService(string visionEndpoint, string visionKey, ILogger<VisionService> logger)
+    public VisionService(string visionKey, string visionEndpoint, ILogger<VisionService> logger)
     {
         _visionEndpoint = visionEndpoint;
         _visionKey = visionKey;

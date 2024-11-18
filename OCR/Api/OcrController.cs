@@ -22,14 +22,13 @@ public class OcrController : ControllerBase
     {
         _logger.LogInformation("Test"); 
         var fileName = "test-screen-shot.png";
-        var assetsFolder = "assets"; // Folder name
-        var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, assetsFolder, fileName);
+        var filePath = Path.Combine("C:\\Users\\justi\\code\\OCR\\assets\\", fileName);
 
         try
         {
             var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
             var result = await _visionService.ReadFileFromBytesAsync(fileBytes);
-            return Ok(result);
+            return new OkObjectResult(result);
         }
         catch (Exception e)
         {

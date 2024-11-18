@@ -30,9 +30,6 @@ public class Program
         builder.Services.AddExceptionHandler<ExceptionHandler>();
         
         builder.Services.AddControllers();
-        
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-        builder.Services.AddOpenApi();
         builder.Services.UseOcrServices();
         
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -44,11 +41,10 @@ public class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
-            app.MapOpenApi();
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+        
         app.UseExceptionHandler(options => { });
 
         app.UseHttpsRedirection();
@@ -57,7 +53,7 @@ public class Program
         app.UseCors(myAllowSpecificOrigins);
         
         app.UseAuthorization();
-
+        app.MapControllers();
         app.Run();
     }
 }
