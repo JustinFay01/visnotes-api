@@ -10,7 +10,7 @@ public interface IVisionService
     /// </summary>
     /// <param name="file"></param>
     /// <returns></returns>
-    Task<List<string>> ReadFileFromBytesAsync(byte[] file);
+    Task<List<string>> ReadFileFromBytesAsync(IFormFile file);
     Task<List<string>> ReadFileFromUrlAsync(string url);
 }
 
@@ -33,12 +33,13 @@ public class VisionService: IVisionService
         };
     }
 
-    public async Task<List<string>> ReadFileFromBytesAsync(byte[] file)
+    public async Task<List<string>> ReadFileFromBytesAsync(IFormFile file)
     {
         _logger.LogInformation("Reading file from bytes");
 
-        using var stream = new MemoryStream(file);
-        var result = await _client.RecognizePrintedTextInStreamAsync(true, stream,
+        var stream = file.OpenReadStream();
+        var result = 
+            await _client.RecognizePrintedTextInStreamAsync(false, stream,
             OcrLanguages.En);
 
         return result.Regions.SelectMany(region => region.Lines)

@@ -15,35 +15,22 @@ public class OcrController : ControllerBase
         _visionService = visionService;
         _logger = logger;
     }
-
-
-    [HttpGet]
-    public async Task<IActionResult> Test()
-    {
-        _logger.LogInformation("Test"); 
-        var fileName = "test-screen-shot.png";
-        var filePath = Path.Combine("C:\\Users\\justi\\code\\OCR\\assets\\", fileName);
-
-        try
-        {
-            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            var result = await _visionService.ReadFileFromBytesAsync(fileBytes);
-            return new OkObjectResult(result);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error reading file");
-            return BadRequest();
-        }
-        
-    }
     
-    [HttpPost]
-    public async Task<IActionResult> ReadFile([FromBody] byte[] file)
+    
+    /// <summary>
+    /// Upload a file to be read.
+    ///
+    /// <see href="https://github.com/domaindrivendev/Swashbuckle.AspNetCore#handle-forms-and-file-uploads"> Handle Forms and File Uploads</see>
+    ///  for swagger information on how to handle IFormFiles within post. 
+    /// </summary>
+    /// <param name="file"></param>
+    /// <returns></returns>
+    [HttpPost("/upload")]
+    public async Task<IActionResult> ReadFile(IFormFile file)
     {
-        _logger.LogInformation("Reading file");
+        //TODO: Validate file is an Image
         var result = await _visionService.ReadFileFromBytesAsync(file);
-        return Ok();
+        return new OkObjectResult(result);
     }
     
 }
