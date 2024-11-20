@@ -15,6 +15,20 @@ public static class ServicesExtensions
             return new VisionService(key, endpoint, logger);
         });
 
+
+        services.AddScoped<IDocumentIntelligenceService, DocumentIntelligenceService>(provider =>
+        {
+            var key = Environment.GetEnvironmentVariable("DI_KEY") ??
+                      throw new ArgumentException("No DI_KEY Env var");
+
+            var endpoint = Environment.GetEnvironmentVariable("DI_ENDPOINT") ??
+                           throw new ArgumentException("No DI_ENDPOINT Env var");
+
+            var logger = provider.GetRequiredService<ILogger<DocumentIntelligenceService>>();
+
+            return new DocumentIntelligenceService(key, endpoint, logger);
+        });
+
         return services;
     }
 }

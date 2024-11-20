@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OCR.Services;
 
 namespace OCR.Api
 {
@@ -8,8 +9,18 @@ namespace OCR.Api
     [Route("api/di")]
     public class DocumentIntelligenceController : ControllerBase
     {
+        private readonly IDocumentIntelligenceService _documentIntelligenceService;
+
+        public DocumentIntelligenceController(IDocumentIntelligenceService documentIntelligenceService)
+        {
+            _documentIntelligenceService = documentIntelligenceService;
+        }
         
-        
-        
+        [HttpPost]
+        public async Task<IActionResult> AnalyzeDocument(IFormFile file)
+        {
+            var result = await _documentIntelligenceService.AnalyzeFileAsync(file);
+            return new OkObjectResult(result);
+        }
     }
 }
