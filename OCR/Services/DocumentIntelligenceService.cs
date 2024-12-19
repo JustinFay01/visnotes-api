@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Azure.AI.FormRecognizer.DocumentAnalysis;
+using OCR.Services.Extensions;
 
 namespace OCR.Services;
 
@@ -31,10 +32,21 @@ public class DocumentIntelligenceService : IDocumentIntelligenceService
         _logger.LogInformation("Analyzing document");
 
         var result = await _client.AnalyzeDocumentAsync(WaitUntil.Completed, "prebuilt-document", file.OpenReadStream());
-        
-        return result.Value.Pages.SelectMany(page => page.Lines)
-            .Select(line => line.Content)
+
+        var words = GetLinesFromPages(result.Value.Pages)
+            .SplitBySpace()
+            .FilterSpecialCharacters()
             .ToList();
+        
+        return words;
     }
+    
+    private static IEnumerable<string> GetLinesFromPages(IReadOnlyList<DocumentPage> pages)
+    {
+        var lines = pages.SelectMany(page => page.Lines)
+            .Select(line => line.Content);
+        return lines;
+    }
+ 
     
 }
