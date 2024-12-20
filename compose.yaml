@@ -6,6 +6,7 @@
 #      dockerfile: OCR/Dockerfile
   postgres:
     image: postgres
+    container_name: ocr_postgres
     ports:
         - "5431:5432"
     volumes:
