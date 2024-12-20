@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using OCR.Data;
 using OCR.Data.Models;
+using OCR.Infrastructure;
 using OCR.Infrastructure.SystemStorage;
 using OCR.Services.DTOs;
 using OCR.Services.Exceptions;
@@ -18,22 +19,24 @@ public interface INoteService
     
     public Task DeleteNoteByIdAsync(Guid id);
     
-    public Task<IEnumerable<Analysis>> GetAnalysesByNoteIdAsync(Guid id);
+    public Task<IEnumerable<AnalysisDto>> GetAnalysesByNoteIdAsync(Guid id);
     
-    public Task<Analysis> CreateAnalysisByNoteIdAsync(Guid id);
+    public Task<AnalysisDto> CreateAnalysisByNoteIdAsync(Guid id);
 }
 
 public class NoteService : INoteService
 {
     private readonly OcrDbContext _context;
     private readonly IFileSystemStorage _fileSystemStorage;
+    private readonly IDocumentIntelligenceService _documentIntelligenceService;
     private readonly IMapper _mapper;
     
-    public NoteService(OcrDbContext context, IFileSystemStorage fileSystemStorage, IMapper mapper)
+    public NoteService(OcrDbContext context, IFileSystemStorage fileSystemStorage, IMapper mapper, IDocumentIntelligenceService documentIntelligenceService)
     {
         _context = context;
         _fileSystemStorage = fileSystemStorage;
         _mapper = mapper;
+        _documentIntelligenceService = documentIntelligenceService;
     }
     
     public async Task<IEnumerable<NoteDto>> GetNotesAsync()
@@ -81,13 +84,28 @@ public class NoteService : INoteService
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Analysis>> GetAnalysesByNoteIdAsync(Guid id)
+    public Task<IEnumerable<AnalysisDto>> GetAnalysesByNoteIdAsync(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Analysis> CreateAnalysisByNoteIdAsync(Guid id)
+    public async Task<AnalysisDto> CreateAnalysisByNoteIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var note = await _context.Notes.FirstOrDefaultAsync(n => n.Id == id);
+        
+        if (note == null)
+        {
+            throw new NoteNotFoundException();
+        }
+        
+        var file = await _fileSystemStorage.GetFileAsync(note.Path);
+        
+        var analysisDto = await _documentIntelligenceService.AnalyzeFileAsync(file);
+        var mappedAnalysis = _mapper.Map<Analysis>(analysisDto);
+        
+        _context.Analyses.Add(mappedAnalysis);
+        await _context.SaveChangesAsync();
+        
+        return analysisDto;
     }
 }

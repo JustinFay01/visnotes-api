@@ -13,15 +13,11 @@ public class NoteController : ControllerBase
     
     private readonly ILogger<NoteController> _logger;
     private readonly INoteService _noteService;
-    private readonly IFileSystemStorage _fileSystemStorage;
-    private readonly IDocumentIntelligenceService _documentIntelligenceService;
     
-    public NoteController(ILogger<NoteController> logger, INoteService noteService, IFileSystemStorage fileSystemStorage, IDocumentIntelligenceService documentIntelligenceService)
+    public NoteController(ILogger<NoteController> logger, INoteService noteService)
     {
         _logger = logger;
         _noteService = noteService;
-        _fileSystemStorage = fileSystemStorage;
-        _documentIntelligenceService = documentIntelligenceService;
     }
     
     // Notes
@@ -61,17 +57,6 @@ public class NoteController : ControllerBase
         return NoContent();
     }
     
-    [HttpPost("{id}")]
-    public async Task<IActionResult> AnalyzeNoteById(Guid id)
-    {
-        var note = await _noteService.GetNoteByIdAsync(id);
-        
-        var file = await _fileSystemStorage.GetFileAsync(note.Path);
-        
-        var analyses = await _documentIntelligenceService.AnalyzeFileAsync(file);
-        return Ok(analyses);
-    }
-    
     // Notes/{id}/analyses
     
     [HttpGet("{id}/analyses")]
@@ -83,11 +68,9 @@ public class NoteController : ControllerBase
     }
     
     [HttpPost("{id}/analyses")]
-    public async Task<IActionResult> CreateAnalysisByNoteId(Guid id, [FromBody] AnalysisDto analysis)
+    public async Task<IActionResult> AnalyzeNoteById(Guid id)
     {
-        //var createdAnalysis = await _noteService.CreateAnalysisByNoteIdAsync(id, analysis);
-        
-        //return Ok(createdAnalysis);
-        throw new NotImplementedException();
+        var analysis = await _noteService.CreateAnalysisByNoteIdAsync(id);
+        return Ok(analysis);
     }
 }

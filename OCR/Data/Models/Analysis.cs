@@ -13,6 +13,8 @@ public class Analysis : BaseEntity
     /// The raw content of the result.
     /// </summary>
     public required string RawValue { get; set; }
+    
+    public string? FilteredValue { get; set; }
     public required Guid NoteId { get; set; }
     public required Note Note { get; set; }
 }
@@ -25,6 +27,8 @@ public class AnalysisConfiguration : BaseEntityConfiguration<Analysis>
         
         builder.Property(c => c.RawValue)
             .IsRequired();
+
+        builder.Property(c => c.FilteredValue);
         
         builder.Property(c => c.CreatedAt)
             .HasColumnType("timestamp")

@@ -19,7 +19,7 @@ public class NoteDto
     /// </summary>
     public required string Type { get; set; }
     
-    public string? Path { get; set; }
+    public required string Path { get; set; }
     
     public DateTime CreatedAt { get; set; }
     

@@ -9,4 +9,6 @@ public class AnalysisDto
     /// The raw content of the result.
     /// </summary>
     public required string RawValue { get; set; }
+    
+    public string? FilteredValue { get; set; }
 }

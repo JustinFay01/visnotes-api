@@ -19,12 +19,13 @@ public interface IFileSystemStorage
     /// <returns></returns>
     public Task DeleteFileAsync(string fileName);
     
+ 
     /// <summary>
-    /// Get file from file system
+    ///  Get file from file system using the local path
     /// </summary>
-    /// <param name="fileName"></param>
-    /// <returns></returns>
-    public Task<IFormFile> GetFileAsync(string fileName);
+    /// <param name="filePath"></param>
+    /// <returns>IFormFile</returns>
+    public Task<IFormFile> GetFileAsync(string filePath);
 }
 
 public class FileSystemStorage : IFileSystemStorage
@@ -68,23 +69,23 @@ public class FileSystemStorage : IFileSystemStorage
         throw new NotImplementedException();
     }
 
-    public async Task<IFormFile> GetFileAsync(string fileName)
+    public async Task<IFormFile> GetFileAsync(string filePath)
     {
-        if(string.IsNullOrWhiteSpace(fileName))
+        if(string.IsNullOrWhiteSpace(filePath))
         {
-            throw new ArgumentNullException(nameof(fileName));
+            throw new ArgumentNullException(nameof(filePath));
         }
         
-        var filePath = Path.Combine(_storagePath, fileName);
+        var fullPath = Path.Combine(_storagePath, filePath);
         
-        if (!File.Exists(filePath))
+        if (!File.Exists(fullPath))
         {
-            throw new FileNotFoundException(fileName);
+            throw new FileNotFoundException(fullPath);
         }
         
         var fileStream = new FileStream(filePath, FileMode.Open);
         
-        var file = await Task.Run(() =>  new FormFile(fileStream, 0, fileStream.Length, fileName, fileName));
+        var file = await Task.Run(() =>  new FormFile(fileStream, 0, fileStream.Length, Path.GetFileName(filePath), fullPath));
         
         return file;
     }

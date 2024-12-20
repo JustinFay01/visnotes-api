@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Azure.AI.FormRecognizer.DocumentAnalysis;
+using OCR.Services.DTOs;
 using OCR.Services.Extensions;
 
 namespace OCR.Infrastructure;
@@ -12,7 +13,7 @@ namespace OCR.Infrastructure;
 /// </summary>
 public interface IDocumentIntelligenceService
 {
-    Task<List<string>> AnalyzeFileAsync(IFormFile file);
+    Task<AnalysisDto> AnalyzeFileAsync(IFormFile file);
 }
 
 public class DocumentIntelligenceService : IDocumentIntelligenceService
@@ -27,24 +28,21 @@ public class DocumentIntelligenceService : IDocumentIntelligenceService
         _client = new DocumentAnalysisClient(new Uri(diEndpoint), new AzureKeyCredential(diKey));
     }
     
-    public async Task<List<string>> AnalyzeFileAsync(IFormFile file)
+    public async Task<AnalysisDto> AnalyzeFileAsync(IFormFile file)
     {
         _logger.LogInformation("Analyzing document");
 
         var result = await _client.AnalyzeDocumentAsync(WaitUntil.Completed, "prebuilt-document", file.OpenReadStream());
 
-        var words = GetLinesFromPages(result.Value.Pages)
-            .SplitBySpace()
-            .FilterSpecialCharacters()
-            .ToList();
-        
-        return words;
-    }
-    
-    private static IEnumerable<string> GetLinesFromPages(IReadOnlyList<DocumentPage> pages)
-    {
-        var lines = pages.SelectMany(page => page.Lines)
-            .Select(line => line.Content);
-        return lines;
+        return new AnalysisDto
+        {
+            CreatedAt = DateTime.Now,
+            RawValue = result.Value.Content,
+            FilteredValue =  string.Join("", result.Value.Pages.SelectMany(page => page.Lines)
+                .Select(line => line.Content)
+                .SplitBySpace()
+                .FilterSpecialCharacters()
+                .ToArray())
+        };
     }
 }
