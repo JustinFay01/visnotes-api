@@ -24,6 +24,8 @@ public class Note : BaseEntity
     public string? Path { get; set; }
     
     public DateTime CreatedAt { get; set; }
+    
+    public ICollection<Analysis>? Analyses { get; set; }
 }
 
 public class NoteConfiguration : BaseEntityConfiguration<Note>
