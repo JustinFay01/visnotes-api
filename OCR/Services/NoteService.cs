@@ -41,7 +41,9 @@ public class NoteService : INoteService
     
     public async Task<IEnumerable<NoteDto>> GetNotesAsync()
     {
-        var notes = await _context.Notes.ToListAsync();
+        var notes = await _context.Notes
+            .Include(n => n.Analyses)
+            .ToListAsync();
         var mappedNotes = _mapper.Map<IEnumerable<NoteDto>>(notes);
         return mappedNotes;
     }
