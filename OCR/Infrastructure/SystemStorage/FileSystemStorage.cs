@@ -83,9 +83,9 @@ public class FileSystemStorage : IFileSystemStorage
             throw new FileNotFoundException(fullPath);
         }
         
-        var fileStream = new FileStream(filePath, FileMode.Open);
+        var fileStream = new FileStream(fullPath, FileMode.Open);
         
-        var file = await Task.Run(() =>  new FormFile(fileStream, 0, fileStream.Length, Path.GetFileName(filePath), fullPath));
+        var file = await Task.Run(() =>  new FormFile(fileStream, 0, fileStream.Length, Path.GetFileName(fullPath), fullPath));
         
         return file;
     }

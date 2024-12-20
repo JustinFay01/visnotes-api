@@ -11,4 +11,6 @@ public class AnalysisDto
     public required string RawValue { get; set; }
     
     public string? FilteredValue { get; set; }
+    
+    public Guid NoteId { get; set; }
 }

@@ -84,9 +84,11 @@ public class NoteService : INoteService
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<AnalysisDto>> GetAnalysesByNoteIdAsync(Guid id)
+    public async Task<IEnumerable<AnalysisDto>> GetAnalysesByNoteIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var analyses = await _context.Analyses.Where(a => a.NoteId == id).ToListAsync();
+        var mappedAnalyses = _mapper.Map<IEnumerable<AnalysisDto>>(analyses);
+        return mappedAnalyses;
     }
 
     public async Task<AnalysisDto> CreateAnalysisByNoteIdAsync(Guid id)
@@ -101,10 +103,14 @@ public class NoteService : INoteService
         var file = await _fileSystemStorage.GetFileAsync(note.Path);
         
         var analysisDto = await _documentIntelligenceService.AnalyzeFileAsync(file);
+        analysisDto.NoteId = id;
+        
         var mappedAnalysis = _mapper.Map<Analysis>(analysisDto);
         
-        _context.Analyses.Add(mappedAnalysis);
+        var analysisEntity = _context.Analyses.Add(mappedAnalysis);
         await _context.SaveChangesAsync();
+        
+        analysisDto.Id = analysisEntity.Entity.Id;
         
         return analysisDto;
     }

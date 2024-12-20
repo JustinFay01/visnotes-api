@@ -38,7 +38,7 @@ public class DocumentIntelligenceService : IDocumentIntelligenceService
         {
             CreatedAt = DateTime.Now,
             RawValue = result.Value.Content,
-            FilteredValue =  string.Join("", result.Value.Pages.SelectMany(page => page.Lines)
+            FilteredValue =  string.Join(" ", result.Value.Pages.SelectMany(page => page.Lines)
                 .Select(line => line.Content)
                 .SplitBySpace()
                 .FilterSpecialCharacters()
