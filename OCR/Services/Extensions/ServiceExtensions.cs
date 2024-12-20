@@ -1,9 +1,15 @@
-﻿namespace OCR.Services.Extensions;
+﻿using Microsoft.EntityFrameworkCore;
+using OCR.Data;
+
+namespace OCR.Services.Extensions;
 
 public static class ServicesExtensions
 {
-    public static IServiceCollection UseOcrServices(this IServiceCollection services)
+    public static IServiceCollection UseOcrServices(this IServiceCollection services, IConfiguration config)
     {
+        services.AddDbContext<OcrDbContext>(options => 
+            options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
+        
         services.AddScoped<IVisionService, VisionService>(provider =>
         {
             var key = Environment.GetEnvironmentVariable("VISION_KEY") ??

@@ -30,7 +30,7 @@ public class Program
         builder.Services.AddExceptionHandler<ExceptionHandler>();
         
         builder.Services.AddControllers();
-        builder.Services.UseOcrServices();
+        builder.Services.UseOcrServices(builder.Configuration);
         
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
