@@ -2,7 +2,7 @@
 using Azure.AI.FormRecognizer.DocumentAnalysis;
 using OCR.Services.Extensions;
 
-namespace OCR.Services;
+namespace OCR.Infrastructure;
 
 /// <summary>
 /// Check out:
@@ -47,6 +47,4 @@ public class DocumentIntelligenceService : IDocumentIntelligenceService
             .Select(line => line.Content);
         return lines;
     }
- 
-    
 }

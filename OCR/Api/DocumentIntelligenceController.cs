@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OCR.Infrastructure;
 using OCR.Services;
 
 namespace OCR.Api

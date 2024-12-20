@@ -1,4 +1,5 @@
 using OCR.Api.ExceptionHandlers;
+using OCR.Infrastructure.Extensions;
 using OCR.Services.Extensions;
 
 namespace OCR;
@@ -30,6 +31,7 @@ public class Program
         builder.Services.AddExceptionHandler<ExceptionHandler>();
         
         builder.Services.AddControllers();
+        builder.Services.UseOcrInfrastructure();
         builder.Services.UseOcrServices(builder.Configuration);
         
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

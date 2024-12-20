@@ -1,24 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OCR.Data;
-using OCR.Infrastructure;
-using OCR.Infrastructure.SystemStorage;
-using OCR.Services.Profiles;
+﻿using OCR.Services;
 
-namespace OCR.Services.Extensions;
+namespace OCR.Infrastructure.Extensions;
 
-public static class ServicesExtensions
+public static class InfrastructureExtensions
 {
-    public static IServiceCollection UseOcrServices(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection UseOcrInfrastructure(this IServiceCollection services)
     {
-        services.AddAutoMapper(typeof(NoteProfile));
-        
-        services.AddDbContext<OcrDbContext>(options => 
-            options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
-        
-        services.AddScoped<INoteService, NoteService>();
-        //services.AddScoped<IAnalysisService, AnalysisService>();
-        services.AddSingleton<IFileSystemStorage, FileSystemStorage>();
-        
         services.AddScoped<IVisionService, VisionService>(provider =>
         {
             var key = Environment.GetEnvironmentVariable("VISION_KEY") ??
@@ -26,7 +13,7 @@ public static class ServicesExtensions
             var endpoint = Environment.GetEnvironmentVariable("VISION_ENDPOINT") ??
                            throw new ArgumentException("No VISION_ENDPOINT Env var");
             var logger = provider.GetRequiredService<ILogger<VisionService>>();
-            
+        
             return new VisionService(key, endpoint, logger);
         });
 
@@ -43,7 +30,7 @@ public static class ServicesExtensions
 
             return new DocumentIntelligenceService(key, endpoint, logger);
         });
-        
+    
         return services;
     }
 }
