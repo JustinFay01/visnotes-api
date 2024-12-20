@@ -16,7 +16,6 @@ public class NoteController : ControllerBase
     private readonly IFileSystemStorage _fileSystemStorage;
     private readonly IDocumentIntelligenceService _documentIntelligenceService;
     
-    
     public NoteController(ILogger<NoteController> logger, INoteService noteService, IFileSystemStorage fileSystemStorage, IDocumentIntelligenceService documentIntelligenceService)
     {
         _logger = logger;
@@ -38,9 +37,9 @@ public class NoteController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> CreateNote([FromBody] IFormFile note)
+    public async Task<IActionResult> CreateNote(IFormFile file)
     {
-        var createdNote = await _noteService.CreateNoteAsync(note);
+        var createdNote = await _noteService.CreateNoteAsync(file);
         return Ok(createdNote);
     }
     

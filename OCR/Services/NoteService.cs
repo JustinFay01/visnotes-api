@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OCR.Data;
 using OCR.Data.Models;
 using OCR.Infrastructure.SystemStorage;
 using OCR.Services.DTOs;
+using OCR.Services.Exceptions;
 
 namespace OCR.Services;
 
@@ -25,23 +27,32 @@ public class NoteService : INoteService
 {
     private readonly OcrDbContext _context;
     private readonly IFileSystemStorage _fileSystemStorage;
-    private readonly Mapper _mapper;
+    private readonly IMapper _mapper;
     
-    public NoteService(OcrDbContext context, IFileSystemStorage fileSystemStorage, Mapper mapper)
+    public NoteService(OcrDbContext context, IFileSystemStorage fileSystemStorage, IMapper mapper)
     {
         _context = context;
         _fileSystemStorage = fileSystemStorage;
         _mapper = mapper;
     }
     
-    public Task<IEnumerable<NoteDto>> GetNotesAsync()
+    public async Task<IEnumerable<NoteDto>> GetNotesAsync()
     {
-        throw new NotImplementedException();
+        var notes = await _context.Notes.ToListAsync();
+        var mappedNotes = _mapper.Map<IEnumerable<NoteDto>>(notes);
+        return mappedNotes;
     }
 
-    public Task<NoteDto> GetNoteByIdAsync(Guid id)
+    public async Task<NoteDto> GetNoteByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var note = await _context.Notes.FirstOrDefaultAsync(n => n.Id == id);
+        if (note == null)
+        {
+            throw new NoteNotFoundException();
+        }
+        
+        var mappedNote = _mapper.Map<NoteDto>(note);
+        return mappedNote;
     }
 
     public async Task<NoteDto> CreateNoteAsync(IFormFile note)
@@ -51,7 +62,7 @@ public class NoteService : INoteService
         var noteEntity = new Note
         {
             Name = note.FileName,
-            Path = path, // Need from file system storage
+            Path = note.FileName, // For now, it is just the name of the file, but in the future it will be the path (i.e. userID/filename)
             Size = note.Length,
             Type = note.ContentType,
             CreatedAt = DateTime.Now

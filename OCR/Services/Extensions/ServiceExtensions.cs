@@ -10,14 +10,19 @@ public static class ServicesExtensions
 {
     public static IServiceCollection UseOcrServices(this IServiceCollection services, IConfiguration config)
     {
-        services.AddAutoMapper(typeof(NoteProfile));
+        services.AddAutoMapper(typeof(NoteProfile).Assembly);
         
         services.AddDbContext<OcrDbContext>(options => 
             options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
         
         services.AddScoped<INoteService, NoteService>();
         //services.AddScoped<IAnalysisService, AnalysisService>();
-        services.AddSingleton<IFileSystemStorage, FileSystemStorage>();
+        services.AddSingleton<IFileSystemStorage>(provider =>
+        {
+            var configuration = provider.GetRequiredService<IConfiguration>();
+            var storagePath = configuration["StoragePath"] ?? throw new ArgumentException("No StoragePath in appsettings.json");
+            return new FileSystemStorage(storagePath);
+        });
         
         services.AddScoped<IVisionService, VisionService>(provider =>
         {

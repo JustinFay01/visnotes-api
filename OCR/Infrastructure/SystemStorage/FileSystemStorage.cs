@@ -46,6 +46,12 @@ public class FileSystemStorage : IFileSystemStorage
         }
         try
         {
+            // Check if the directory exists
+            if (!Directory.Exists(_storagePath))
+            {
+                Directory.CreateDirectory(_storagePath);
+            }
+            
             var filePath = Path.Combine(_storagePath, file.FileName);
             await using var stream = new FileStream(filePath, FileMode.Create);
             await file.CopyToAsync(stream);

@@ -28,6 +28,7 @@ public class Program
         
         builder.Services.AddExceptionHandler<ArgumentExceptionHandler>();
         builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+        builder.Services.AddExceptionHandler<EntityNotFoundExceptionHandler>();
         builder.Services.AddExceptionHandler<ExceptionHandler>();
         
         builder.Services.AddControllers();
