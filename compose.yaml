@@ -1,14 +1,20 @@
 ﻿services:
-#  ocr:
-#    image: ocr
-#    build:
-#      context: .
-#      dockerfile: OCR/Dockerfile
-  postgres:
+  ocr:
+    image: ocr
+    container_name: ocr-api
+    build:
+      context: .
+      dockerfile: OCR/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - DI_KEY=${DI_KEY}
+      - DI_ENDPOINT=${DI_ENDPOINT}
+  postgres: # DNS resolves to this container name NOT the image or `container_name`
     image: postgres
     container_name: ocr_postgres
     ports:
-        - "5431:5432"
+        - "5432:5432"
     volumes:
       - ./pg_data:/var/lib/postgresql/data
     environment:
