@@ -6,6 +6,7 @@ using OCR.Infrastructure;
 using OCR.Infrastructure.SystemStorage;
 using OCR.Services.DTOs;
 using OCR.Services.Exceptions;
+using FileNotFoundException = OCR.Infrastructure.SystemStorage.Exceptions.FileNotFoundException;
 
 namespace OCR.Services;
 
@@ -81,9 +82,19 @@ public class NoteService : INoteService
         return mappedNote;
     }
 
-    public Task DeleteNoteByIdAsync(Guid id)
+    public async Task DeleteNoteByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var note = await _context.Notes.FirstOrDefaultAsync(n => n.Id == id);
+        if (note == null)
+        {
+            throw new NoteNotFoundException();
+        }
+
+        var file = await _fileSystemStorage.GetFileAsync(note.Path);
+        await _fileSystemStorage.DeleteFileAsync(file.FileName);
+        
+        _context.Notes.Remove(note);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<AnalysisDto>> GetAnalysesByNoteIdAsync(Guid id)

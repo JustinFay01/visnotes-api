@@ -66,7 +66,16 @@ public class FileSystemStorage : IFileSystemStorage
 
     public Task DeleteFileAsync(string fileName)
     {
-        throw new NotImplementedException();
+        var fullPath = Path.Combine(_storagePath, fileName);
+        if (File.Exists(fullPath))
+        {
+            File.Delete(fullPath);
+        }
+        else
+        {
+            throw new FileNotFoundException(fullPath);
+        }
+        return Task.CompletedTask;
     }
 
     public async Task<IFormFile> GetFileAsync(string filePath)

@@ -16,7 +16,7 @@
       - DI_ENDPOINT=${DI_ENDPOINT}
       - OCR_STORAGE_PATH=/var/lib/ocr_storage
   postgres: # DNS resolves to this container name NOT the image or `container_name`
-    image: postgres
+    image: postgres 
     container_name: ocr_postgres
     ports:
       - "5432:5432"
@@ -25,4 +25,4 @@
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: ocr_db
+      POSTGRES_DB: ocr_db # Database name
