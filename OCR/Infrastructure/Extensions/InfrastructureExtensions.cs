@@ -1,4 +1,4 @@
-﻿using OCR.Services;
+﻿using OCR.Infrastructure.SystemStorage;
 
 namespace OCR.Infrastructure.Extensions;
 
@@ -6,6 +6,14 @@ public static class InfrastructureExtensions
 {
     public static IServiceCollection UseOcrInfrastructure(this IServiceCollection services)
     {
+        services.AddSingleton<IFileSystemStorage>(_ =>
+        {
+            var storagePath = Environment.GetEnvironmentVariable("OCR_STORAGE_PATH")
+                                                                 ?? throw new ArgumentException("No OCR_STORAGE_PATH in Env vars");
+            return new FileSystemStorage(storagePath);
+        });
+
+        
         services.AddScoped<IVisionService, VisionService>(provider =>
         {
             var key = Environment.GetEnvironmentVariable("VISION_KEY") ??
