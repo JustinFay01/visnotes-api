@@ -9,7 +9,7 @@ nupkg/
 pg_data/
 
 # ocr_file_storage
-ocr_file_storage/
+ocr_storage/
 
 # Visual Studio Code
 .vscode/
