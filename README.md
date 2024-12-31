@@ -1,4 +1,18 @@
-﻿# TODO
+﻿
+# DevOps
+
+## Docker 
+
+### FE 
+
+#### Registry link
+
+### BE
+
+#### Registry link
+
+
+# TODO
 
 # Front End
 - [x] Add framer motion animated list to cloud upload
@@ -35,4 +49,3 @@
     - raw_value
 
 
-# DevOps
