@@ -1,6 +1,6 @@
 ﻿services:
   ocr:
-    image: ocr
+    image: justinfay501/ocr-api:latest # Image name
     build:
       context: .
       dockerfile: Dockerfile # Path to the Dockerfile which will be used to build the images
