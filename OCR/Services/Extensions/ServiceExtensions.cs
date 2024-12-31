@@ -11,9 +11,8 @@ public static class ServicesExtensions
     public static IServiceCollection UseOcrServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddAutoMapper(typeof(NoteProfile).Assembly);
-        
         services.AddDbContext<OcrDbContext>(options => 
-            options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(config.GetConnectionString("DefaultConnection") + Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")));
         
         services.AddScoped<INoteService, NoteService>();
         return services;

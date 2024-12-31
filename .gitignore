@@ -8,6 +8,8 @@ nupkg/
 # Postgres Data
 pg_data/
 
+secrets/
+
 # ocr_file_storage
 ocr_storage/
 

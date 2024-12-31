@@ -1,0 +1,42 @@
+﻿services:
+  ocr:
+    image: justinfay501/ocr-api:latest # Image name
+    depends_on:
+      - postgres # Will force the postgres container to start before this one
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./ocr_storage:/var/lib/ocr_storage
+    secrets:
+      - DI_KEY
+      - DI_ENDPOINT
+      - POSTGRES_PASSWORD
+    environment:
+      - DI_KEY=/run/secrets/DI_KEY
+      - DI_ENDPOINT=/run/secrets/DI_ENDPOINT
+      - OCR_STORAGE_PATH=/var/lib/ocr_storage
+      - POSTGRES_PASSWORD=/run/secrets/POSTGRES_PASSWORD
+  postgres: # DNS resolves to this container name NOT the image or `container_name`
+    image: postgres
+    ports:
+      - "5432:5432"
+    secrets:
+      - POSTGRES_PASSWORD
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD_FILE=/run/secrets/POSTGRES_PASSWORD
+      - POSTGRES_DB=ocr_db # Database
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "admin", "-d", "ocr_db" ]
+      interval: 30s
+      retries: 5
+      
+secrets:
+  POSTGRES_PASSWORD:
+    external: true
+  DI_KEY:
+    external: true
+  DI_ENDPOINT:
+    external: true
