@@ -6,7 +6,7 @@
 1. init swarm
 
 ```
-docker swarm init --advertise-addr 192.168.1.121
+docker swarm init --advertise-addr <your ip | 192.168.1.121>
 ```
 
 2. Create postgres secret
@@ -53,6 +53,9 @@ Need to change appsettings.json postgres -> localhost
 - [ ] Add a button to download the word cloud as an image
 - [ ] Add different Layout options
 - [ ] Update the Analysis view when selecting a note
+
+- [ ] Fix weird null condtion checks for analysis
+- [ ] Clean up how updating files int he table connects to the word cloud
 
 # Back End
 
