@@ -1,5 +1,5 @@
 ﻿services:
-  ocr:
+  web:
     image: justinfay501/ocr-api:V0.29 # Image name
     ports:
       - "8080:8080"
@@ -14,7 +14,7 @@
       - DI_ENDPOINT=/run/secrets/DI_ENDPOINT
       - OCR_STORAGE_PATH=/var/lib/ocr_storage
       - POSTGRES_PASSWORD=/run/secrets/POSTGRES_PASSWORD
-  postgres: # DNS resolves to this container name NOT the image or `container_name`
+  postgres: # DNS resolves to this container
     image: postgres
     ports:
       - "5432:5432"
@@ -26,10 +26,10 @@
       - POSTGRES_USER=justin
       - POSTGRES_PASSWORD_FILE=/run/secrets/POSTGRES_PASSWORD
       - POSTGRES_DB=ocr_db # Database
-secrets:
-  POSTGRES_PASSWORD:
-    external: true
-  DI_KEY:
-    external: true
-  DI_ENDPOINT:
-    external: true
+  secrets:
+    POSTGRES_PASSWORD:
+      external: true
+    DI_KEY:
+      external: true
+    DI_ENDPOINT:
+      external: true

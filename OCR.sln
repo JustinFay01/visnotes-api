@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OCR", "OCR\OCR.csproj", "{C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{38DB399E-0F6D-458D-AEE8-57FC3A7076FF}"
 	ProjectSection(SolutionItems) = preProject
-		compose.yaml = compose.yaml
+		compose.yml = compose.yml
 		.gitignore = .gitignore
 		.dockerignore = .dockerignore
 	EndProjectSection
