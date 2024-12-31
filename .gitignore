@@ -10,6 +10,9 @@ pg_data/
 
 secrets/
 
+# Local app settings
+appsettings.Development.json
+
 # ocr_file_storage
 ocr_storage/
 

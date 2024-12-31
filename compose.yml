@@ -1,5 +1,5 @@
 ﻿services:
-  web:
+  api:
     image: justinfay501/ocr-api:latest # Image name
     build:
       context: .
@@ -10,14 +10,12 @@
       - "8080:8080"
     volumes:
       - ./ocr_storage:/var/lib/ocr_storage
-    secrets:
-      - DI_KEY
-      - DI_ENDPOINT
-      - POSTGRES_PASSWORD
     environment:
-      DI_KEY: /run/secrets/DI_KEY
-      DI_ENDPOINT: /run/secrets/DI_ENDPOINT
-      POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
+      DI_KEY: ${DI_KEY}
+      DI_ENDPOINT: ${DI_ENDPOINT}
+      # Can't use the docker secret directly in the environment variable
+      # Because it will just use the file path
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       OCR_STORAGE_PATH: /var/lib/ocr_storage
   postgres: # DNS resolves to this container name NOT the image or `container_name`
     image: postgres 
@@ -30,19 +28,14 @@
     environment:
       POSTGRES_DB: ocr_db # Database name
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
-    
+      # POSTGRES image as specific implementation to read the password from the file
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
+  
 secrets:
-    DI_KEY:
-        file: ./secrets/DI_KEY.txt
-        #external: true
-    DI_ENDPOINT:
-        file: ./secrets/DI_ENDPOINT.txt
-        #external: true
-    POSTGRES_PASSWORD:
-        file: ./secrets/POSTGRES_PASSWORD.txt
-        #external: true
-
+  POSTGRES_PASSWORD:
+      # File is for compose external is for swarm
+      #file: ./secrets/POSTGRES_PASSWORD.txt
+      external: true
 volumes:
     pg_data:
     ocr_storage:
