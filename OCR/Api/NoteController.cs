@@ -27,7 +27,9 @@ public class NoteController : ControllerBase
     {
         _logger.LogInformation("Call received to get all notes at {time}", DateTime.Now);
         
+        _logger.LogCritical("V0.29");
         var notes = await _noteService.GetNotesAsync();
+        
         
         return Ok(notes);
     }

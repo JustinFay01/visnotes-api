@@ -1,8 +1,6 @@
 ﻿services:
   ocr:
-    image: justinfay501/ocr-api:latest # Image name
-    depends_on:
-      - postgres # Will force the postgres container to start before this one
+    image: justinfay501/ocr-api:V0.29 # Image name
     ports:
       - "8080:8080"
     volumes:
@@ -25,14 +23,9 @@
     volumes:
       - ./pg_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=admin
+      - POSTGRES_USER=justin
       - POSTGRES_PASSWORD_FILE=/run/secrets/POSTGRES_PASSWORD
       - POSTGRES_DB=ocr_db # Database
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "admin", "-d", "ocr_db" ]
-      interval: 30s
-      retries: 5
-      
 secrets:
   POSTGRES_PASSWORD:
     external: true

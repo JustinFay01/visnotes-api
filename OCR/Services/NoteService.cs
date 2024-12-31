@@ -31,13 +31,15 @@ public class NoteService : INoteService
     private readonly IFileSystemStorage _fileSystemStorage;
     private readonly IDocumentIntelligenceService _documentIntelligenceService;
     private readonly IMapper _mapper;
+    private readonly ILogger<NoteService> _logger;
     
-    public NoteService(OcrDbContext context, IFileSystemStorage fileSystemStorage, IMapper mapper, IDocumentIntelligenceService documentIntelligenceService)
+    public NoteService(OcrDbContext context, IFileSystemStorage fileSystemStorage, IMapper mapper, IDocumentIntelligenceService documentIntelligenceService, ILogger<NoteService> logger)
     {
         _context = context;
         _fileSystemStorage = fileSystemStorage;
         _mapper = mapper;
         _documentIntelligenceService = documentIntelligenceService;
+        _logger = logger;
     }
     
     public async Task<IEnumerable<NoteDto>> GetNotesAsync()
