@@ -1,7 +1,6 @@
 ﻿services:
   ocr:
     image: ocr
-    container_name: ocr-api
     build:
       context: .
       dockerfile: Dockerfile # Path to the Dockerfile which will be used to build the images
@@ -17,7 +16,6 @@
       - OCR_STORAGE_PATH=/var/lib/ocr_storage
   postgres: # DNS resolves to this container name NOT the image or `container_name`
     image: postgres 
-    container_name: ocr_postgres
     ports:
       - "5432:5432"
     volumes:
