@@ -1,16 +1,34 @@
 ﻿
 # DevOps
 
-## Docker 
+## Linux Steps
 
-### FE 
+1. init swarm
 
-#### Registry link
+```
+docker swarm init --advertise-addr 192.168.1.121
+```
 
-### BE
+2. Create postgres secret
 
-#### Registry link
+```
+printf <PASSWORD HERE> | docker secret create POSTGRES_PASSWORD -
+```
 
+3. Deploy
+```
+docker stack deploy -c swarm.yml ocr-api
+```
+
+4. Check
+```
+docker stack services ocr-api
+```
+
+***Cleanup***
+```
+ docker stack rm ocr-api
+```
 
 # TODO
 
