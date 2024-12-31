@@ -34,6 +34,9 @@ Restart docker
 sudo systemctl restart docker
 ```
 
+**IF RUNNING MIGARTIONS MANUALLY**
+Need to change appsettings.json postgres -> localhost
+
 # TODO
 
 # Front End
