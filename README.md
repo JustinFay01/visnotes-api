@@ -29,6 +29,10 @@ docker stack services ocr-api
 ```
  docker stack rm ocr-api
 ```
+Restart docker
+```
+sudo systemctl restart docker
+```
 
 # TODO
 
