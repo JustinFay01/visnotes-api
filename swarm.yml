@@ -22,7 +22,7 @@
   postgres: # DNS resolves to this container name NOT the image or `container_name`
     image: postgres
     ports:
-      - "5432:5432"
+      - "6969:5432"
     volumes:
       - ./pg_data:/var/lib/postgresql/data
     secrets:

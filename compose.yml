@@ -17,11 +17,12 @@
       # Because it will just use the file path
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       OCR_STORAGE_PATH: /var/lib/ocr_storage
-  postgres: # DNS resolves to this container name NOT the image or `container_name`
-    image: postgres 
+  postgres:
+    # DNS resolves to this container name NOT the image or `container_name`
+    image: postgres
     ports:
-      - "5432:5432"
-    volumes:  
+      - "6969:5432"
+    volumes:
       - ./pg_data:/var/lib/postgresql/data
     secrets:
       - POSTGRES_PASSWORD
@@ -30,12 +31,12 @@
       POSTGRES_USER: admin
       # POSTGRES image as specific implementation to read the password from the file
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
-  
+
 secrets:
   POSTGRES_PASSWORD:
-      # File is for compose external is for swarm
-      file: ./secrets/POSTGRES_PASSWORD.txt
-      # external: true
+    # File is for compose external is for swarm
+    file: ./secrets/POSTGRES_PASSWORD.txt
+    # external: true
 volumes:
-    pg_data:
-    ocr_storage:
+  pg_data:
+  ocr_storage:
