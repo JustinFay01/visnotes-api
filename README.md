@@ -3,6 +3,12 @@
 
 ## Linux Steps
 
+**Create network>**
+
+```
+docker network create --driver overlay ocr_net
+```
+
 1. init swarm
 
 ```

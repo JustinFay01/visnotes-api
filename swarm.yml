@@ -54,4 +54,4 @@ volumes:
 # This is a global network
 networks:
   ocr_net:
-    driver: overlay
+    external: true
