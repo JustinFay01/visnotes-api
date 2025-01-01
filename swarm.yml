@@ -55,4 +55,3 @@ volumes:
 networks:
   ocr_net:
     driver: overlay
-    external: true
