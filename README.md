@@ -37,6 +37,13 @@ sudo systemctl restart docker
 **IF RUNNING MIGARTIONS MANUALLY**
 Need to change appsettings.json postgres -> localhost
 
+1. Create VLAN for Bucephalus
+2. Purchase a domain and point to Bucephalus
+3. Create Github Actions to deploy to Bucephalus using Docker Stack Deploy
+4. Create a reverse proxy to route traffic to the correct service
+5. Create a CI/CD pipeline to deploy to Bucephalus
+6. Add Grafana and Prometheus to monitor the services
+
 # TODO
 
 # Front End

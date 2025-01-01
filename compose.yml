@@ -17,9 +17,6 @@
       # Because it will just use the file path
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       OCR_STORAGE_PATH: /var/lib/ocr_storage
-    deploy: # Rolling Releases (Blue Green)
-      update_config:
-        order: start-first
   postgres:
     # DNS resolves to this container name NOT the image or `container_name`
     image: postgres
