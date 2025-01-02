@@ -2,14 +2,14 @@
   api:
     image: justinfay501/ocr-api:latest # Image name
     # Swarm does not support build because it has mutliple nodes
-      # meaning it pulls the image from the registry
+    # meaning it pulls the image from the registry
     # build:
-     # context: .
-     # dockerfile: Dockerfile # Path to the Dockerfile which will be used to build the images
-    ports:
-      - "8080:8080"
-    networks:
-        - ocr_net
+    # context: .
+    # dockerfile: Dockerfile # Path to the Dockerfile which will be used to build the images
+
+    # REVIST WITH TRAEFIK
+    # ports:
+    #   - "8080:8080"
     volumes:
       - ./ocr_storage:/var/lib/ocr_storage
     environment:
@@ -20,17 +20,16 @@
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       OCR_STORAGE_PATH: /var/lib/ocr_storage
     deploy: # Rolling release (Blue Green Deployment)
-      update_config: 
+      update_config:
         order: start-first
     depends_on:
       - postgres # Will force the postgres container to start before this one
-      
+
   postgres: # DNS resolves to this container name NOT the image or `container_name`
     image: postgres
-    networks:
-        - ocr_net
-    ports:
-      - "6969:5432"
+    # REVIST WITH TRAEFIK
+    # ports:
+    #   - "6969:5432"
     volumes:
       - ./pg_data:/var/lib/postgresql/data
     secrets:
@@ -43,15 +42,9 @@
 
 secrets:
   POSTGRES_PASSWORD:
-  # File is for compose external is for swarm
-  # file: ./secrets/POSTGRES_PASSWORD.txt
+    # File is for compose external is for swarm
+    # file: ./secrets/POSTGRES_PASSWORD.txt
     external: true
 volumes:
   pg_data:
   ocr_storage:
-    
-# Overlay network so other stacks can communicate with this stack
-# This is a global network
-networks:
-  ocr_net:
-    external: true
