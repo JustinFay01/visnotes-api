@@ -40,6 +40,11 @@ Restart docker
 sudo systemctl restart docker
 ```
 
+View logs
+```
+docker service logs --follow <service_name>
+```
+
 **IF RUNNING MIGARTIONS MANUALLY**
 Need to change appsettings.json postgres -> localhost
 

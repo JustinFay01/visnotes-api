@@ -1,28 +1,32 @@
 services:
   reverse-proxy:
     image: traefik:v3.2
-  command:
-    - "--api.insecure=true"
-    - "--providers.docker"
-    - "--entrypoints.web.address=:443"
-    # Prvent any docker container from being exposed by default
-    - "--providers.docker.exposedbydefault=false"
-    ## HTTPS Configuration
-    - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-    - "--certificateresolvers.myresolver.acme.email=justin@eremos.cloud"
-    - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-    ## Port 80 Redirect
-    - "--entrypoints.web.address=:80"
-    - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-    - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-  ports:
-    - "80:80"
-    - "443:443"
-    - "8080:8080"
-  volumes:
-    # so that traefik can listen to the Docker events
-    - /var/run/docker.sock:/var/run/docker.sock
-    - ./letsencrypt:/letsencrypt
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
+      - "--entrypoints.web.address=:443"
+      # Prvent any docker container from being exposed by default
+      - "--providers.docker.exposedbydefault=false"
+      ## HTTPS Configuration
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificateresolvers.myresolver.acme.email=justin@eremos.cloud"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      ## Port 80 Redirect
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      # so that traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./letsencrypt:/letsencrypt
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
 
-volume:
+volumes:
   letsencrypt:
