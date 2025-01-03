@@ -1,0 +1,29 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Run Migrations
+
+on:
+  workflow_run:
+    workflows: [Build and Deploy Docker]
+  types:
+    - completed
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Run EF Migrations
+      run: |
+        cd OCR
+        dotnet ef database update --connection ${{ secrets.DB_CONNECTION_STRING }}
