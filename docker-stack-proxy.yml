@@ -4,7 +4,10 @@ services:
     networks:
       - ocr-net
     command:
-      - --configFile=/etc/traefik/traefik.yml"
+      #- --configFile=/etc/traefik/traefik.yml"
+      - --api.insecure=true
+      - --providers.docker=true
+
     ports:
       - "80:80"
       - "443:443"
