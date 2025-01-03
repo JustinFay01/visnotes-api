@@ -24,7 +24,7 @@
       update_config:
         order: start-first
     volumes:
-      - ./ocr_storage:/var/lib/ocr/ocr_storage
+      - ocr_storage:/var/lib/ocr/ocr_storage
     depends_on:
       - postgres # Will force the postgres container to start before this one
 
@@ -39,7 +39,7 @@
       retries: 5
       start_period: 80s
     volumes:
-      - ./pg_data:/var/lib/ocr/postgresql/data
+      - pg_data:/var/lib/ocr/postgresql/data
     secrets:
       - POSTGRES_PASSWORD
     environment:

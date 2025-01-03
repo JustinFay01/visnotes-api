@@ -109,6 +109,13 @@ command="docker system dial-stdio"
 
 1. Any **bind** mounts in the docker-compose file will need to be manually created on the host machine. 
 
+**To investigate a service**
+
+```bash
+docker service ps <service_name>
+```
+
+
 # Misc
 
 **IF RUNNING MIGARTIONS MANUALLY**
