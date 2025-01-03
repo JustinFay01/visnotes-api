@@ -4,7 +4,7 @@ services:
     networks:
       - ocr-net
     command:
-      - "configFile=traefik.yml"
+      - "configFile=/etc/traefik/traefik.yml"
     ports:
       - "80:80"
       - "443:443"
@@ -14,10 +14,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./letsencrypt:/var/lib/ocr/letsencrypt
       - ./acme.json:/var/lib/ocr/acme.json
+      - ./traefik.yml:/etc/traefik/traefik.yml
 
 volumes:
   letsencrypt:
   acme.json:
+  traefik.yml:
 
 networks:
   ocr-net:
