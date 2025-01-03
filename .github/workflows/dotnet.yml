@@ -6,8 +6,8 @@ name: Run Migrations
 on:
   workflow_run:
     workflows: [Build and Deploy Docker]
-  types:
-    - completed
+    types:
+      - completed
 
 jobs:
   build:
