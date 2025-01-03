@@ -9,7 +9,7 @@
       - "traefik.http.routers.api.rule=Host(`eremos.cloud`) && PathPrefix(`/api`)"
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls.certresolver=myresolver"
-      - "traefik.http.services.api.loadbalancer.server.port=2300"
+      - "traefik.http.services.api.loadbalancer.server.port=8080"
     environment:
       # Put env vars on linux by using the following command
         # export DI_KEY=your_key_here
@@ -33,7 +33,7 @@
     networks:
       - ocr-net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "ocr_db", "-U", "admin"]
+      test: [ "CMD", "pg_isready" ]
       interval: 30s
       timeout: 60s
       retries: 5

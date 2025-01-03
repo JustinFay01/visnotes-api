@@ -32,19 +32,6 @@ docker stack deploy -c swarm.yml ocr-api
 docker stack services ocr-api
 ```
 
-***Cleanup***
-```bash
- docker stack rm ocr-api
-```
-**Restart docker**
-```bash
-sudo systemctl restart docker
-```
-
-**View logs**
-```bash
-docker service logs --follow <service_name>
-```
 
 ## Adding CI/CD Pipeline (With Docker and Github Actions)
 
@@ -106,15 +93,25 @@ command="docker system dial-stdio"
 *Check pipeline for how to use docker stack to deploy*
 
 ## Notes
-
-1. Any **bind** mounts in the docker-compose file will need to be manually created on the host machine. 
-
 **To investigate a service**
 
 ```bash
 docker service ps <service_name>
 ```
 
+***Cleanup***
+```bash
+ docker stack rm ocr-api
+```
+**Restart docker**
+```bash
+sudo systemctl restart docker
+```
+
+**View logs**
+```bash
+docker service logs --follow <service_name>
+```
 
 # Misc
 
