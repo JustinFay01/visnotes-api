@@ -156,6 +156,7 @@ Need to change appsettings.json postgres -> localhost
 ## Todo
 
 - [ ] Rework how we read docker secrets
+- [ ] Remove IFormFile from Service Layer
 
 
 ## DB Architecture
