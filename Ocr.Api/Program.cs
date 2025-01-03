@@ -1,7 +1,7 @@
-using OCR.ExceptionHandlers;
+using Ocr.Api.ExceptionHandlers;
 using Ocr.Services.Extensions;
 
-namespace OCR;
+namespace Ocr.Api;
 
 public class Program
 {
@@ -31,6 +31,8 @@ public class Program
         builder.Services.AddExceptionHandler<ExceptionHandler>();
 
         builder.Services.AddControllers();
+        
+        builder.Services.UseOcrContext(builder.Configuration);
         builder.Services.UseOcrInfrastructure();
         builder.Services.UseOcrServices(builder.Configuration);
 
