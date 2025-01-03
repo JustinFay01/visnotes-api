@@ -10,15 +10,16 @@
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls.certresolver=myresolver"
       - "traefik.http.services.api.loadbalancer.server.port=8080"
+    secrets:
+      - DI_KEY
+      - DI_ENDPOINT
+      - POSTGRES_PASSWORD
     environment:
-      # Put env vars on linux by using the following command
-        # export DI_KEY=your_key_here
-        # etc.
-      DI_KEY: ${DI_KEY}
-      DI_ENDPOINT: ${DI_ENDPOINT}
+      DI_KEY: /run/secrets/DI_KEY
+      DI_ENDPOINT: /run/secrets/DI_ENDPOINT
       # Can't use the docker secret directly in the environment variable
       # Because it will just use the file path
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
       OCR_STORAGE_PATH: /var/lib/ocr/ocr_storage
     deploy: # Rolling release (Blue Green Deployment)
       update_config:
@@ -51,6 +52,10 @@
 secrets:
   POSTGRES_PASSWORD:
     # Must be created use `docker secret create POSTGRES_PASSWORD <file>`
+    external: true
+  DI_KEY:
+    external: true
+  DI_ENDPOINT:
     external: true
     
 volumes:
