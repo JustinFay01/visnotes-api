@@ -45,6 +45,21 @@ View logs
 docker service logs --follow <service_name>
 ```
 
+**On server, you may need to create volumes manually**
+
+Example:
+```bash
+mkdir -p /home/justin/code/ocr-source/OCR/letsencrypt
+mkdir -p /home/justin/code/ocr-source/OCR
+touch /home/justin/code/ocr-source/OCR/acme.json
+
+# 644 means owner can read and write, group can read, and everyone else can read
+# 755 means owner can read, write, and execute, but group and everyone else can only read and execute
+chmod -R 755 /home/justin/code/ocr-source/OCR/letsencrypt
+chmod 644 /home/justin/code/ocr-source/OCR/acme.json
+chmod 644 /home/justin/code/ocr-source/OCR/traefik.yml
+```
+
 **IF RUNNING MIGARTIONS MANUALLY**
 Need to change appsettings.json postgres -> localhost
 
@@ -93,5 +108,6 @@ Need to change appsettings.json postgres -> localhost
     - note_id
     - created_at
     - raw_value
+
 
 

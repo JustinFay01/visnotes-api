@@ -4,26 +4,30 @@ services:
     networks:
       - ocr-net
     command:
-      #- --configFile=/etc/traefik/traefik.yml"
-      - --api.insecure=true
-      - --providers.docker=true
-
+    - "--providers.docker"
+    - "--providers.docker.exposedbydefault=false"
+    - "--entryPoints.websecure.address=:443"
+    - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+    - "--certificatesresolvers.myresolver.acme.email=justin@eremos.cloud"
+    - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    - "--entrypoints.web.address=:80"
+    - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+    - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-      - "3000:3000"
+      - mode: host
+        target: 80
+        published: 80
+        protocol: tcp
+      - mode: host
+        target: 443
+        published: 443
+        protocol: tcp
     volumes:
-      # so that traefik can listen to the Docker events
+      - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./letsencrypt:/var/lib/ocr/letsencrypt
-      - ./acme.json:/var/lib/ocr/acme.json
-      - ./traefik.yml:/etc/traefik/traefik.yml
-
+      
 volumes:
   letsencrypt:
-  acme.json:
-  traefik.yml:
 
 networks:
   ocr-net:
