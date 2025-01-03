@@ -151,8 +151,12 @@ Need to change appsettings.json postgres -> localhost
 # Back End
 
 ## CI/CD
+- [ ] Add way to run migrations on the database when deploying
 
-- [ ] 
+## Todo
+
+- [ ] Rework how we read docker secrets
+
 
 ## DB Architecture
 **Minimum Viable Product Schema**
