@@ -32,6 +32,12 @@
     image: postgres
     networks:
       - ocr-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "ocr_db", "-U", "admin"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
     volumes:
       - ./pg_data:/var/lib/ocr/postgresql/data
     secrets:
