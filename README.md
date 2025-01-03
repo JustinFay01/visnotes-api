@@ -3,7 +3,7 @@
 
 ## Linux Steps
 
-**Create network>**
+**Create network**
 
 ```
 docker network create --driver overlay ocr_net

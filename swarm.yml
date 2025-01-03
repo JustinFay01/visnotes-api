@@ -11,14 +11,14 @@
     # ports:
     #   - "8080:8080"
     volumes:
-      - ./ocr_storage:/var/lib/ocr_storage
+      - ./ocr_storage:/var/lib/ocr/ocr_storage
     environment:
       DI_KEY: ${DI_KEY}
       DI_ENDPOINT: ${DI_ENDPOINT}
       # Can't use the docker secret directly in the environment variable
       # Because it will just use the file path
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      OCR_STORAGE_PATH: /var/lib/ocr_storage
+      OCR_STORAGE_PATH: /var/lib/ocr/ocr_storage
     deploy: # Rolling release (Blue Green Deployment)
       update_config:
         order: start-first
@@ -31,7 +31,7 @@
     # ports:
     #   - "6969:5432"
     volumes:
-      - ./pg_data:/var/lib/postgresql/data
+      - ./pg_data:/var/lib/ocr/postgresql/data
     secrets:
       - POSTGRES_PASSWORD
     environment:

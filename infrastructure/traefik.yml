@@ -1,0 +1,19 @@
+entryPoints:
+  web:
+    address: ":80"
+
+  websecure:
+    address: ":443"
+
+certificatesResolvers:
+  ocrresolver:
+    acme:
+      email: justin@eremos.cloud
+      storage: acme.json
+      httpChallenge:
+        # used during the challenge
+        entryPoint: web
+
+providers:
+  docker:
+    exposedByDefault: false

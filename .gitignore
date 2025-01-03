@@ -5,16 +5,17 @@ project.lock.json
 *.pyc
 nupkg/
 
-# Postgres Data
+# Docker Bindings
 pg_data/
+ocr_storage/
+letsencrypt/
 
 secrets/
 
 # Local app settings
 appsettings.Development.json
 
-# ocr_file_storage
-ocr_storage/
+
 
 # Visual Studio Code
 .vscode/
