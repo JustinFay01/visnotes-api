@@ -4,11 +4,12 @@ services:
     networks:
       - ocr-net
     command:
-      - "configFile=/etc/traefik/traefik.yml"
+      - --configFile=/etc/traefik/traefik.yml"
     ports:
       - "80:80"
       - "443:443"
       - "8080:8080"
+      - "3000:3000"
     volumes:
       # so that traefik can listen to the Docker events
       - /var/run/docker.sock:/var/run/docker.sock
