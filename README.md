@@ -105,7 +105,9 @@ command="docker system dial-stdio"
 **You should no longer be able to ssh via the deploy user**
 *Check pipeline for how to use docker stack to deploy*
 
+## Notes
 
+1. Any **bind** mounts in the docker-compose file will need to be manually created on the host machine. 
 
 # Misc
 
