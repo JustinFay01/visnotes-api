@@ -31,6 +31,8 @@
       - ocr_storage:/var/lib/ocr/ocr_storage
     depends_on:
       - postgres # Will force the postgres container to start before this one
+    # Run Migrations
+    command: ["dotnet", "ef", "database", "update"]
 
   postgres: # DNS resolves to this container name NOT the image or `container_name`
     image: postgres
