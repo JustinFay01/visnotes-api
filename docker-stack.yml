@@ -15,11 +15,14 @@
       - DI_ENDPOINT
       - POSTGRES_PASSWORD
     environment:
-      DI_KEY: /run/secrets/DI_KEY
-      DI_ENDPOINT: /run/secrets/DI_ENDPOINT
+      # Adding secrets will create a file in the container with the secret value
+      # This name will be read by a Util class to egt the value
+      # we cannot pass /run/secrets/POSTGRES_PASSWORD because it will just pass the file path
+      DI_KEY: DI_KEY
+      DI_ENDPOINT: DI_ENDPOINT
       # Can't use the docker secret directly in the environment variable
       # Because it will just use the file path
-      POSTGRES_PASSWORD: /run/secrets/POSTGRES_PASSWORD
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
       OCR_STORAGE_PATH: /var/lib/ocr/ocr_storage
     deploy: # Rolling release (Blue Green Deployment)
       update_config:
