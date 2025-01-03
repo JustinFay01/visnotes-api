@@ -1,18 +1,19 @@
 ﻿services:
   api:
-    image: justinfay501/ocr-api:latest # Image name
-    # Swarm does not support build because it has mutliple nodes
-    # meaning it pulls the image from the registry
-    # build:
-    # context: .
-    # dockerfile: Dockerfile # Path to the Dockerfile which will be used to build the images
-
-    # REVIST WITH TRAEFIK
-    # ports:
-    #   - "8080:8080"
-    volumes:
-      - ./ocr_storage:/var/lib/ocr/ocr_storage
+    image: justinfay501/ocr-api:${GIT_COMMIT_HASH-latest} # Image name
+    networks:
+      - ocr-net
+    # Traefik labels
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`eremos.cloud`) && Path(`/api`)"
+      - "traefik.http.routers.api.entrypoints=websecure"
+      - "traefik.http.routers.api.tls.certresolver=myresolver"
+      - "traefik.http.services.api.loadbalancer.server.port=2300"
     environment:
+      # Put env vars on linux by using the following command
+        # export DI_KEY=your_key_here
+        # etc.
       DI_KEY: ${DI_KEY}
       DI_ENDPOINT: ${DI_ENDPOINT}
       # Can't use the docker secret directly in the environment variable
@@ -22,14 +23,15 @@
     deploy: # Rolling release (Blue Green Deployment)
       update_config:
         order: start-first
+    volumes:
+      - ./ocr_storage:/var/lib/ocr/ocr_storage
     depends_on:
       - postgres # Will force the postgres container to start before this one
 
   postgres: # DNS resolves to this container name NOT the image or `container_name`
     image: postgres
-    # REVIST WITH TRAEFIK
-    # ports:
-    #   - "6969:5432"
+    networks:
+      - ocr-net
     volumes:
       - ./pg_data:/var/lib/ocr/postgresql/data
     secrets:
@@ -42,9 +44,13 @@
 
 secrets:
   POSTGRES_PASSWORD:
-    # File is for compose external is for swarm
-    # file: ./secrets/POSTGRES_PASSWORD.txt
+    # Must be created use `docker secret create POSTGRES_PASSWORD <file>`
     external: true
+    
 volumes:
   pg_data:
   ocr_storage:
+
+networks:
+  ocr-net:
+    external: true
