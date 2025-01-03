@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Ocr.Services;
 
-namespace OCR.Controllers;
+namespace Ocr.Api.Controllers;
 
 [ApiController]
 [Route("api/notes")]
@@ -27,8 +27,15 @@ public class NoteController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateNote(IFormFile file)
+    public async Task<IActionResult> CreateNote()
     {
+        if(!Request.Form.Files.Any())
+        {
+            return BadRequest("No file was uploaded");
+        }
+        
+        var file = Request.Form.Files[0];
+        
         var createdNote = await _noteService.CreateNoteAsync(file);
         return Ok(createdNote);
     }

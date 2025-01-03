@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 
-namespace OCR.ExceptionHandlers.Abstract;
+namespace Ocr.Api.ExceptionHandlers.Abstract;
 
 public abstract class BaseExceptionHandler<T> : IExceptionHandler where T : class
 {

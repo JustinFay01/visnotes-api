@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OCR.ExceptionHandlers.Abstract;
+using Ocr.Api.ExceptionHandlers.Abstract;
 using Ocr.Services.Exceptions.Abstract;
 
-namespace OCR.ExceptionHandlers;
+namespace Ocr.Api.ExceptionHandlers;
 
 public class EntityNotFoundExceptionHandler : BaseExceptionHandler<EntityNotFoundException>
 {

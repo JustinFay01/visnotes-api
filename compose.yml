@@ -23,16 +23,14 @@
     # DNS resolves to this container name NOT the image or `container_name`
     image: postgres
     ports:
-      - "6969:5432"
+      - "5432:5432"
     volumes:
       - ./pg_data:/var/lib/postgresql/data
-    secrets:
-      - POSTGRES_PASSWORD
     environment:
       POSTGRES_DB: ocr_db # Database name
       POSTGRES_USER: admin
       # POSTGRES image as specific implementation to read the password from the file
-      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
 
 secrets:
   DI_KEY:

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Ocr.Services.SystemStorage.Exceptions;
 using FileNotFoundException = Ocr.Services.SystemStorage.Exceptions.FileNotFoundException;
 

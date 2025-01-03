@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
-using OCR.ExceptionHandlers.Abstract;
+using Ocr.Api.ExceptionHandlers.Abstract;
 
-namespace OCR.ExceptionHandlers;
+namespace Ocr.Api.ExceptionHandlers;
 
 public class ValidationExceptionHandler : BaseExceptionHandler<ValidationExceptionHandler>
 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Ocr.Data.Models;
 
 namespace Ocr.Data;
@@ -23,5 +24,18 @@ public class OcrDbContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(NoteConfiguration).Assembly);
         base.OnModelCreating(modelBuilder);
+    }
+    
+    /// <summary>
+    /// This is needed for the dot net ef migrations to work
+    /// </summary>
+    public class OcrDbContextFactory : IDesignTimeDbContextFactory<OcrDbContext>
+    {
+        public OcrDbContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<OcrDbContext>();
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=ocr_db;Username=admin;Password=");
+            return new OcrDbContext(optionsBuilder.Options);
+        }
     }
 }

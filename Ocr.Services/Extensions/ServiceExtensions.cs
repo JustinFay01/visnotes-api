@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Ocr.Data;
 using Ocr.Services.Profiles;
 using Ocr.Services.SystemStorage;
 using Ocr.Services.Utilities;
@@ -9,6 +11,17 @@ namespace Ocr.Services.Extensions;
 
 public static class ServicesExtensions
 {
+    public static IServiceCollection UseOcrContext(this IServiceCollection services, IConfiguration config)
+    {
+        var postgresPassword = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD") ??
+                               throw new ArgumentException("No POSTGRES_PASSWORD in Env vars");
+        var parsedPassword = DockerSecretUtil.GetSecret(postgresPassword);
+        
+        services.AddDbContext<OcrDbContext>(options =>
+            options.UseNpgsql(config.GetConnectionString("DefaultConnection") + parsedPassword));
+
+        return services;
+    }
     public static IServiceCollection UseOcrServices(this IServiceCollection services, IConfiguration config)
     {
         services.AddAutoMapper(typeof(NoteProfile).Assembly);

@@ -157,6 +157,7 @@ Need to change appsettings.json postgres -> localhost
 
 - [ ] Rework how we read docker secrets
 - [ ] Remove IFormFile from Service Layer
+- [ ] Add whether or not we are running docker to determine password for database
 
 
 ## DB Architecture
@@ -177,4 +178,8 @@ Need to change appsettings.json postgres -> localhost
     - raw_value
 
 
+## Migrations CLI
 
+```bash
+dotnet ef database update -s .\Ocr.Api\ -p .\Ocr.Data\ --context OcrDbContext
+```

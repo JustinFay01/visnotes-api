@@ -15,8 +15,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\OCR.Api\OCR.Api.csproj"/>
         <ProjectReference Include="..\Ocr.Data\Ocr.Data.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.Configuration">
+        <HintPath>..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\9.0.0\Microsoft.Extensions.Configuration.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

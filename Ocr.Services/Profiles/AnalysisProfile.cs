@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Ocr.Data.Migrations;
+using Ocr.Data.Models;
 using Ocr.Services.Dtos;
 
 namespace Ocr.Services.Profiles;
