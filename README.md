@@ -85,8 +85,14 @@ mkdir ~/.ssh
 # On Local Machine
 ssh-keygen -t ed25519 -C "deploy-<container_name/repo>@<host>"
 
-# Copy the public key to the remote machine
-cat ~/.ssh/id_ed25519.pub | ssh deploy-<container_name/repo>@<host> 'cat >> ~/.ssh/authorized_keys'
+# Copy the public key clipboard
+## windows
+cat ~/.ssh/id_ed25519.pub | clip
+## linux
+cat ~/.ssh/id_ed25519.pub | xclip -selection clipboard
+
+# On Remote Machine
+echo `<public_key>` > ~/.ssh/authorized_keys
 ```
 5. Restrict deploy user to only use the docker command
 
@@ -94,7 +100,7 @@ cat ~/.ssh/id_ed25519.pub | ssh deploy-<container_name/repo>@<host> 'cat >> ~/.s
 nano ~/.ssh/authorized_keys
 
 # Prepend the key with the following
-command="docker system dial-system"
+command="docker system dial-stdio"
 ```
 **You should no longer be able to ssh via the deploy user**
 *Check pipeline for how to use docker stack to deploy*

@@ -47,7 +47,7 @@ jobs:
         with:
           name: ocr-api
           file: docker-stack.yml
-          host: ${{ secrets.DEPLOY_HOST }}
+          host: eremos.cloud
           user: deploy-ocr-api
           ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           env_file: ./envfile
