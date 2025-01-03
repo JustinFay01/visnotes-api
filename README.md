@@ -6,7 +6,7 @@
 **Create network**
 
 ```
-docker network create --driver overlay ocr_net
+docker network create --driver overlay ocr-net
 ```
 
 1. init swarm

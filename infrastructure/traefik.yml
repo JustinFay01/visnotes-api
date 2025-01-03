@@ -13,7 +13,3 @@ certificatesResolvers:
       httpChallenge:
         # used during the challenge
         entryPoint: web
-
-providers:
-  docker:
-    exposedByDefault: false
