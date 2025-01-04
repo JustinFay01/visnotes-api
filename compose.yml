@@ -1,24 +1,24 @@
 ﻿services:
-#  api:
-#    #image: justinfay501/ocr-api:latest # Image name
-#    build:
-#      context: .
-#      dockerfile: Dockerfile # Path to the Dockerfile which will be used to build the images
-#    depends_on:
-#      - postgres # Will force the postgres container to start before this one
-#    ports:
-#      - "8080:8080"
-#    volumes:
-#      - ./ocr_storage:/var/lib/ocr_storage
-#    secrets:
-#        - DI_KEY
-#        - DI_ENDPOINT
-#        - POSTGRES_PASSWORD
-#    environment:
-#      DI_KEY: DI_KEY
-#      DI_ENDPOINT: DI_ENDPOINT
-#      POSTGRES_PASSWORD: POSTGRES_PASSWORD
-#      OCR_STORAGE_PATH: /var/lib/ocr_storage
+  api:
+    #image: justinfay501/ocr-api:latest # Image name
+    build:
+      context: .
+      dockerfile: Dockerfile # Path to the Dockerfile which will be used to build the images
+    depends_on:
+      - postgres # Will force the postgres container to start before this one
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./ocr_storage:/var/lib/ocr_storage
+    secrets:
+        - DI_KEY
+        - DI_ENDPOINT
+        - POSTGRES_PASSWORD
+    environment:
+      DI_KEY: DI_KEY
+      DI_ENDPOINT: DI_ENDPOINT
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
+      OCR_STORAGE_PATH: /var/lib/ocr_storage
   postgres:
     # DNS resolves to this container name NOT the image or `container_name`
     image: postgres

@@ -12,8 +12,8 @@ using Ocr.Data;
 namespace Ocr.Data.Migrations
 {
     [DbContext(typeof(OcrDbContext))]
-    [Migration("20250103213240_init")]
-    partial class init
+    [Migration("20250104025851_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
