@@ -1,4 +1,39 @@
 ﻿services:
+  postgres: # DNS resolves to this container name NOT the image or `container_name`
+    image: postgres
+    networks:
+      - ocr-net
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    volumes:
+      - pg_data:/var/lib/ocr/postgresql/data
+    secrets:
+      - POSTGRES_PASSWORD
+    environment:
+      POSTGRES_DB: ocr_db # Database name
+      POSTGRES_USER: admin
+      # POSTGRES image as specific implementation to read the password from the file
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
+  
+  migrations:
+    image: justinfay501/ocr-migrations:${GIT_COMMIT_HASH-latest} # Image name
+    networks:
+      - ocr-net
+    depends_on:
+      - postgres
+    secrets:
+      - POSTGRES_PASSWORD
+    environment: 
+      POSTGRES_USER: admin
+      POSTGRES_DB: ocr_db
+      # Can't use the docker secret directly in the environment variable
+      # Because it will just use the file path
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
+  
   api:
     image: justinfay501/ocr-api:${GIT_COMMIT_HASH-latest} # Image name
     networks:
@@ -23,37 +58,16 @@
       # Can't use the docker secret directly in the environment variable
       # Because it will just use the file path
       POSTGRES_PASSWORD: POSTGRES_PASSWORD
-      OCR_STORAGE_PATH: /var/lib/ocr/ocr_storage
+      OCR_STORAGE_PATH: /var/lib/ocr/ocr_storage    
+    depends_on:
+      - postgres # Will force the postgres container to start before this one
+      - migrations
+
     deploy: # Rolling release (Blue Green Deployment)
       update_config:
         order: start-first
     volumes:
       - ocr_storage:/var/lib/ocr/ocr_storage
-    depends_on:
-      - postgres # Will force the postgres container to start before this one
-    # Run Migrations
-    command: ["dotnet", "ef", "database", "update"]
-
-  postgres: # DNS resolves to this container name NOT the image or `container_name`
-    image: postgres
-    networks:
-      - ocr-net
-    healthcheck:
-      test: [ "CMD", "pg_isready" ]
-      interval: 30s
-      timeout: 60s
-      retries: 5
-      start_period: 80s
-    volumes:
-      - pg_data:/var/lib/ocr/postgresql/data
-    secrets:
-      - POSTGRES_PASSWORD
-    environment:
-      POSTGRES_DB: ocr_db # Database name
-      POSTGRES_USER: admin
-      # POSTGRES image as specific implementation to read the password from the file
-      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
-
 secrets:
   POSTGRES_PASSWORD:
     # Must be created use `docker secret create POSTGRES_PASSWORD <file>`

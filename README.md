@@ -156,7 +156,10 @@ Need to change appsettings.json postgres -> localhost
 ## Todo
 
 - [ ] Rework how we read docker secrets
-
+- [ ] Remove IFormFile from Service Layer
+- [ ] Add whether or not we are running docker to determine password for database
+- [ ] Move docker util to shared project
+- [ ] Simplify Local development docker secrets. They don't need to be secrets...
 
 ## DB Architecture
 **Minimum Viable Product Schema**
@@ -176,4 +179,16 @@ Need to change appsettings.json postgres -> localhost
     - raw_value
 
 
+## Migrations CLI
 
+```bash
+dotnet ef database update -s .\Ocr.Api\ -p .\Ocr.Data\ --context OcrDbContext
+```
+
+## Env Vars Needed
+
+1. CONNECTION_STRING
+   - Used for local development, specifically needed to run migrations through the CLI
+2. POSTGRES_PASSWORD
+3. DI_KEY
+4. DI_ENDPOINT

@@ -1,42 +1,57 @@
 ﻿services:
+  postgres:
+    # DNS resolves to this container name NOT the image or `container_name`
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ocr_db # Database name
+      POSTGRES_USER: admin
+      # POSTGRES image as specific implementation to read the password from the file
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  migrations:
+    build:
+      context: .
+      dockerfile: Ocr.Data.Migrations/Dockerfile.Migrations
+    depends_on:
+      - postgres
+    secrets:
+      - POSTGRES_PASSWORD
+    environment: 
+      POSTGRES_USER: admin
+      POSTGRES_DB: ocr_db
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
   api:
-    image: justinfay501/ocr-api:latest # Image name
     build:
       context: .
       dockerfile: Dockerfile # Path to the Dockerfile which will be used to build the images
     depends_on:
       - postgres # Will force the postgres container to start before this one
+      - migrations
     ports:
       - "8080:8080"
     volumes:
       - ./ocr_storage:/var/lib/ocr_storage
-    environment:
-      DI_KEY: ${DI_KEY}
-      DI_ENDPOINT: ${DI_ENDPOINT}
-      # Can't use the docker secret directly in the environment variable
-      # Because it will just use the file path
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      OCR_STORAGE_PATH: /var/lib/ocr_storage
-  postgres:
-    # DNS resolves to this container name NOT the image or `container_name`
-    image: postgres
-    ports:
-      - "6969:5432"
-    volumes:
-      - ./pg_data:/var/lib/postgresql/data
     secrets:
-      - POSTGRES_PASSWORD
+        - DI_KEY
+        - DI_ENDPOINT
+        - POSTGRES_PASSWORD
     environment:
-      POSTGRES_DB: ocr_db # Database name
-      POSTGRES_USER: admin
-      # POSTGRES image as specific implementation to read the password from the file
-      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
+      DI_KEY: DI_KEY
+      DI_ENDPOINT: DI_ENDPOINT
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
+      OCR_STORAGE_PATH: /var/lib/ocr_storage
+ 
 
 secrets:
+  DI_KEY:
+      file: ./secrets/DI_KEY.txt
+  DI_ENDPOINT:
+      file: ./secrets/DI_ENDPOINT.txt
   POSTGRES_PASSWORD:
-    # File is for compose external is for swarm
     file: ./secrets/POSTGRES_PASSWORD.txt
-    # external: true
 volumes:
   pg_data:
   ocr_storage:

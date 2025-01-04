@@ -6,28 +6,24 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["OCR/OCR.csproj", "OCR/"]
-RUN dotnet restore "OCR/OCR.csproj"
+
+COPY ["Ocr.Api/Ocr.Api.csproj", "Ocr.Api/"]
+
+# Class libraries
+COPY ["Ocr.Data/Ocr.Data.csproj", "Ocr.Data/"]
+COPY ["Ocr.Services/Ocr.Services.csproj", "Ocr.Services/"]
+
+RUN dotnet restore "Ocr.Api/Ocr.Api.csproj"
 COPY . .
-WORKDIR "/src/OCR"
-RUN dotnet build "OCR.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Ocr.Api"
+RUN dotnet build "Ocr.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "OCR.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-# Migrations stage
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS migrations
-WORKDIR /app
-COPY --from=publish /app/publish . 
-# Install dotnet-ef globally
-RUN dotnet tool install --global dotnet-ef --version 9
-# Add the global tools to PATH
-ENV PATH="${PATH}:/root/.dotnet/tools"
-# Run database migrations
-ENTRYPOINT ["dotnet-ef", "database", "update"]
+RUN dotnet publish "Ocr.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "OCR.dll"]
+ENTRYPOINT ["dotnet", "Ocr.Api.dll"]
