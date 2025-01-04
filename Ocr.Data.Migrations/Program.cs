@@ -11,7 +11,7 @@ using Ocr.Services.Extensions;
 
 OcrDbContext? dbContext;
 ILogger<Program>? logger;
-var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
