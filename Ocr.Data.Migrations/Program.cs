@@ -11,7 +11,7 @@ using Ocr.Services.Extensions;
 
 OcrDbContext? dbContext;
 ILogger<Program>? logger;
-var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
 
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
@@ -40,6 +40,7 @@ void ConfigureServices()
     });
 
     ResolveSecret? resolveSecret = environmentName == "Production" ? DockerSecretUtil.GetSecret : null;
+    Console.WriteLine($"Environment: {environmentName}");
     services.UseOcrContext(configuration, resolveSecret);
 }
 
