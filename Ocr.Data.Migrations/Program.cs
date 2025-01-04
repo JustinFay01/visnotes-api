@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ocr.Data;
+using Ocr.Data.Utilities;
+using Ocr.Services.Abstract;
 using Ocr.Services.Extensions;
 
 OcrDbContext? dbContext;
@@ -19,22 +21,26 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 var services = new ServiceCollection();
-ConfigureServices(services);
+ConfigureServices();
 
 var serviceProvider = services.BuildServiceProvider();
 GetServices(serviceProvider);
+
+
+RunMigration();
 return;
 
-void ConfigureServices(IServiceCollection s)
+void ConfigureServices()
 {
-    s.AddTransient<IConfiguration>(_ => configuration);
-    s.AddLogging(builder =>
+    services.AddTransient<IConfiguration>(_ => configuration);
+    services.AddLogging(builder =>
     {
         builder.AddConsole();
         builder.AddDebug();
     });
 
-    s.UseOcrServices();
+    ResolveSecret? resolveSecret = environmentName == "Production" ? DockerSecretUtil.GetSecret : null;
+    services.UseOcrContext(configuration, resolveSecret);
 }
 
 void GetServices(ServiceProvider sp)
