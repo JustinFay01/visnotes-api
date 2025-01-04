@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Ocr.Data.Models;
+using Ocr.Data.Utilities;
 
 namespace Ocr.Data;
 
@@ -33,8 +34,18 @@ public class OcrDbContext : DbContext
     {
         public OcrDbContext CreateDbContext(string[] args)
         {
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+            
+            var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
+                                      ?? throw new ArgumentException("No CONNECTION_STRING in Env vars");
+            
+            if(environment == "Production")
+            {
+                connectionString =  DockerSecretUtil.GetSecret(connectionString);
+            }
+            
             var optionsBuilder = new DbContextOptionsBuilder<OcrDbContext>();
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=ocr_db;Username=admin;Password=");
+            optionsBuilder.UseNpgsql(connectionString);
             return new OcrDbContext(optionsBuilder.Options);
         }
     }

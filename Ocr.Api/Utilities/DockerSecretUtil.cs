@@ -1,4 +1,4 @@
-﻿namespace Ocr.Services.Utilities;
+﻿namespace Ocr.Api.Utilities;
 
 public static class DockerSecretUtil
 {

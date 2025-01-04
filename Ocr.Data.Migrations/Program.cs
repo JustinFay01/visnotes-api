@@ -5,42 +5,44 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ocr.Data;
+using Ocr.Services.Extensions;
 
 OcrDbContext? dbContext;
 ILogger<Program>? logger;
-// var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-// var builder = new ConfigurationBuilder();
-// var configuration = builder
-//     .SetBasePath(Directory.GetCurrentDirectory())
-//     .AddJsonFile("appsettings.json", true)
-//     .AddJsonFile($"appsettings.{environmentName}.json", true)
-//     .AddEnvironmentVariables()
-//     .Build();
-// var services = new ServiceCollection();
-// ConfigureServices(services);
-//
-// var serviceProvider = services.BuildServiceProvider();
-// GetServices(serviceProvider);
-// return;
-//
-// void ConfigureServices(IServiceCollection services)
-// {
-//     services.AddTransient<IConfiguration>(_ => configuration);
-//
-//     services.AddLogging(loggingBuilder =>
-//     {
-//         loggingBuilder.AddDebug();
-//         loggingBuilder.AddSimpleConsole();
-//     });
-//
-//     // services.UseOcrServices()
-// }
+var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
-void GetServices(ServiceProvider serviceProvider)
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false)
+    .AddJsonFile($"appsettings.{environmentName}.json", optional: true)
+    .AddEnvironmentVariables()
+    .Build();
+
+var services = new ServiceCollection();
+ConfigureServices(services);
+
+var serviceProvider = services.BuildServiceProvider();
+GetServices(serviceProvider);
+return;
+
+void ConfigureServices(IServiceCollection s)
 {
-    logger = serviceProvider.GetService<ILogger<Program>>()!;
+    s.AddTransient<IConfiguration>(_ => configuration);
+    s.AddLogging(builder =>
+    {
+        builder.AddConsole();
+        builder.AddDebug();
+    });
 
-    //dbContext = serviceProvider.GetService<GenosContext>()!;
+    s.UseOcrServices();
+}
+
+void GetServices(ServiceProvider sp)
+{
+    ArgumentNullException.ThrowIfNull(sp);
+
+    logger = sp.GetService<ILogger<Program>>()!;
+    dbContext = sp.GetService<OcrDbContext>();
 }
 
 

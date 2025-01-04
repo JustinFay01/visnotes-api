@@ -1,4 +1,6 @@
 using Ocr.Api.ExceptionHandlers;
+using Ocr.Api.Utilities;
+using Ocr.Services.Abstract;
 using Ocr.Services.Extensions;
 
 namespace Ocr.Api;
@@ -32,9 +34,12 @@ public class Program
 
         builder.Services.AddControllers();
         
-        builder.Services.UseOcrContext(builder.Configuration);
-        builder.Services.UseOcrInfrastructure();
-        builder.Services.UseOcrServices(builder.Configuration);
+        // If not in development, use Docker stack secrets
+        ResolveSecret? secretResolver = !builder.Environment.IsDevelopment() ? DockerSecretUtil.GetSecret : null;
+        
+        builder.Services.UseOcrContext(builder.Configuration, secretResolver);
+        builder.Services.UseOcrInfrastructure(secretResolver);
+        builder.Services.UseOcrServices();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
