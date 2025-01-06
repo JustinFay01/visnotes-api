@@ -12,13 +12,18 @@
       POSTGRES_USER: admin
       # POSTGRES image as specific implementation to read the password from the file
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
-  
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d ocr_db -U admin" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   migrations:
     image: justinfay501/ocr-migrations:${GIT_COMMIT_HASH-latest} # Image name
     networks:
       - ocr-net
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     secrets:
       - POSTGRES_PASSWORD
     environment: 
@@ -54,8 +59,10 @@
       POSTGRES_PASSWORD: POSTGRES_PASSWORD
       OCR_STORAGE_PATH: /var/lib/ocr/ocr_storage    
     depends_on:
-      - postgres # Will force the postgres container to start before this one
-      - migrations
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
 
     deploy: # Rolling release (Blue Green Deployment)
       update_config:

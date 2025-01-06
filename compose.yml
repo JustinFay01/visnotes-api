@@ -34,8 +34,10 @@
       context: .
       dockerfile: Dockerfile # Path to the Dockerfile which will be used to build the images
     depends_on:
-      - postgres # Will force the postgres container to start before this one
-      - migrations
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
     ports:
       - "8080:8080"
     volumes:
