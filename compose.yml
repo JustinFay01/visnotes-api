@@ -11,12 +11,18 @@
       POSTGRES_USER: admin
       # POSTGRES image as specific implementation to read the password from the file
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d ocr_db -U admin" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   migrations:
     build:
       context: .
       dockerfile: Ocr.Data.Migrations/Dockerfile.Migrations
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     secrets:
       - POSTGRES_PASSWORD
     environment: 
