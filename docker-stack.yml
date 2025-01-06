@@ -59,10 +59,10 @@
       POSTGRES_PASSWORD: POSTGRES_PASSWORD
       OCR_STORAGE_PATH: /var/lib/ocr/ocr_storage    
     depends_on:
-      postgres:
-        condition: service_healthy
-      migrations:
-        condition: service_completed_successfully
+      # Swarm doesn't support adding a condition to the service yet
+      # https://github.com/docker/cli/issues/3880?reload=1
+      - postgres
+      - migrations
 
     deploy: # Rolling release (Blue Green Deployment)
       update_config:
