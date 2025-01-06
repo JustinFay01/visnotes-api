@@ -22,8 +22,7 @@
     networks:
       - ocr-net
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
     secrets:
       - POSTGRES_PASSWORD
     environment: 
