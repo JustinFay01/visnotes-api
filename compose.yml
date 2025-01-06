@@ -22,7 +22,7 @@
     environment: 
       POSTGRES_USER: admin
       POSTGRES_DB: ocr_db
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
   api:
     build:
       context: .
@@ -47,9 +47,9 @@
 
 secrets:
   DI_KEY:
-      file: ./secrets/DI_KEY.txt
+    file: ./secrets/DI_KEY.txt
   DI_ENDPOINT:
-      file: ./secrets/DI_ENDPOINT.txt
+    file: ./secrets/DI_ENDPOINT.txt
   POSTGRES_PASSWORD:
     file: ./secrets/POSTGRES_PASSWORD.txt
 volumes:

@@ -12,6 +12,7 @@ COPY ["Ocr.Api/Ocr.Api.csproj", "Ocr.Api/"]
 # Class libraries
 COPY ["Ocr.Data/Ocr.Data.csproj", "Ocr.Data/"]
 COPY ["Ocr.Services/Ocr.Services.csproj", "Ocr.Services/"]
+COPY ["Ocr.Shared/Ocr.Shared.csproj", "Ocr.Shared/"]
 
 RUN dotnet restore "Ocr.Api/Ocr.Api.csproj"
 COPY . .

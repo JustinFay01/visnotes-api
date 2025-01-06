@@ -21,7 +21,7 @@ public static class ServicesExtensions
 
         if (secretResolver != null)
         {
-            postgresPassword = secretResolver(postgresPassword);
+            postgresPassword = secretResolver(postgresPassword, "POSTGRES_PASSWORD");
         }
         
         var connectionString = config.GetConnectionString("DefaultConnection");
@@ -56,8 +56,8 @@ public static class ServicesExtensions
         
         if (secretResolver != null)
         {
-            diKey = secretResolver(diKey);
-            diEndpoint = secretResolver(diEndpoint);
+            diKey = secretResolver(diKey, "DI_KEY");
+            diEndpoint = secretResolver(diEndpoint, "DI_ENDPOINT");
         }
 
         services.AddScoped<IDocumentIntelligenceService, DocumentIntelligenceService>(provider =>

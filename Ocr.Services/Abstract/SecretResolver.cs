@@ -8,4 +8,4 @@
 /// </summary>
 /// <param name="secretName"></param>
 /// <returns></returns>
-public delegate string ResolveSecret(string secretName);
+public delegate string ResolveSecret(string secretName, string logSafeSecretName);

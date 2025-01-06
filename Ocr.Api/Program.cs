@@ -1,7 +1,7 @@
 using Ocr.Api.ExceptionHandlers;
-using Ocr.Api.Utilities;
 using Ocr.Services.Abstract;
 using Ocr.Services.Extensions;
+using Ocr.Shared.Utilities;
 
 namespace Ocr.Api;
 
@@ -35,7 +35,9 @@ public class Program
         builder.Services.AddControllers();
         
         // If not in development, use Docker stack secrets
-        ResolveSecret? secretResolver = !builder.Environment.IsDevelopment() ? DockerSecretUtil.GetSecret : null;
+        ResolveSecret? secretResolver = !builder.Environment.IsDevelopment() ? 
+            DockerSecretUtil.GetSecret 
+            : null;
         
         builder.Services.UseOcrContext(builder.Configuration, secretResolver);
         builder.Services.UseOcrInfrastructure(secretResolver);

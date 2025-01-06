@@ -5,9 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ocr.Data;
-using Ocr.Data.Utilities;
 using Ocr.Services.Abstract;
 using Ocr.Services.Extensions;
+using Ocr.Shared.Utilities;
 
 OcrDbContext? dbContext;
 ILogger<Program>? logger;
@@ -39,8 +39,10 @@ void ConfigureServices()
         builder.AddDebug();
     });
 
-    ResolveSecret? resolveSecret = environmentName == "Production" ? DockerSecretUtil.GetSecret : null;
-    Console.WriteLine($"Environment: {environmentName}");
+    ResolveSecret? resolveSecret = environmentName == "Production" 
+        ? DockerSecretUtil.GetSecret 
+        : null;
+
     services.UseOcrContext(configuration, resolveSecret);
 }
 

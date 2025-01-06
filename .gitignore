@@ -12,11 +12,6 @@ letsencrypt/
 
 secrets/
 
-# Local app settings
-appsettings.Development.json
-
-
-
 # Visual Studio Code
 .vscode/
 

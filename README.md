@@ -192,3 +192,5 @@ dotnet ef database update -s .\Ocr.Api\ -p .\Ocr.Data\ --context OcrDbContext
 2. POSTGRES_PASSWORD
 3. DI_KEY
 4. DI_ENDPOINT
+5. ASPNETCORE_ENVIRONMENT
+  - Set to "Development" for local development

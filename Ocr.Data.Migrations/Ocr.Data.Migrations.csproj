@@ -17,6 +17,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Ocr.Data\Ocr.Data.csproj"/>
         <ProjectReference Include="..\Ocr.Services\Ocr.Services.csproj" />
+        <ProjectReference Include="..\Ocr.Shared\Ocr.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -19,6 +19,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Ocr.Services\Ocr.Services.csproj" />
+      <ProjectReference Include="..\Ocr.Shared\Ocr.Shared.csproj" />
     </ItemGroup>
 
 </Project>
