@@ -43,14 +43,15 @@ public class FileSystemStorage : IFileSystemStorage
     public async Task<string> SaveFileAsync(IFormFile file)
     {
         if (file.Length <= 0 || file.Length > MaxFileSize) throw new FileLengthInvalidException(file.Length);
+        
+        // Check if the file exists
+        if (File.Exists(Path.Combine(_storagePath, file.FileName))) 
+            throw new FileExistsException(file.FileName);
+        
         try
         {
             // Check if the directory exists
             if (!Directory.Exists(_storagePath)) Directory.CreateDirectory(_storagePath);
-            
-            // Check if the file exists
-            if (File.Exists(Path.Combine(_storagePath, file.FileName))) 
-                throw new FileExistsException(file.FileName);
 
             var filePath = Path.Combine(_storagePath, file.FileName);
             await using var stream = new FileStream(filePath, FileMode.Create);
