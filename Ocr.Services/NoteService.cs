@@ -63,7 +63,7 @@ public class NoteService : INoteService
 
     public async Task<NoteDto> CreateNoteAsync(IFormFile note)
     {
-        var path = await _fileSystemStorage.SaveFileAsync(note);
+        await _fileSystemStorage.SaveFileAsync(note);
 
         var noteEntity = new Note
         {

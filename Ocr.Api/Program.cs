@@ -27,6 +27,7 @@ public class Program
         // Add services to the container.
         builder.Services.AddAuthorization();
 
+        builder.Services.AddExceptionHandler<FileConflictExceptionHandler>();
         builder.Services.AddExceptionHandler<ArgumentExceptionHandler>();
         builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
         builder.Services.AddExceptionHandler<EntityNotFoundExceptionHandler>();
