@@ -192,3 +192,5 @@ dotnet ef database update -s .\Ocr.Api\ -p .\Ocr.Data\ --context OcrDbContext
 2. DI_ENDPOINT
 3. ASPNETCORE_ENVIRONMENT
  - Development
+4. OCR_STORAGE_PATH
+ - Example: C:\Users\justin\code\OCR\ocr_storage
