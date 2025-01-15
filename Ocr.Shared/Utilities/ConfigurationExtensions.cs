@@ -13,10 +13,10 @@ public static class ConfigurationExtensions
 
         if (env == "Development") return connectionString;
         
-        var postgresPasswordPath = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD")
-                                   ?? throw new ArgumentException("No POSTGRES_PASSWORD in Env vars");
+        var postgresPasswordPath = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD_FILE")
+                                   ?? throw new ArgumentException("No POSTGRES_PASSWORD_FILE in Env vars");
             
-        var pass = DockerSecretUtil.GetSecret(postgresPasswordPath, "POSTGRES_PASSWORD");
+        var pass = DockerSecretUtil.GetSecret(postgresPasswordPath, "POSTGRES_PASSWORD_FILE");
         connectionString += pass;
 
         return connectionString;

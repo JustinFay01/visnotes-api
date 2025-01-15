@@ -6,11 +6,13 @@
       - "5432:5432"
     volumes:
       - ./pg_data:/var/lib/postgresql/data
+    secrets:
+      - POSTGRES_PASSWORD
     environment:
       POSTGRES_DB: ocr_db # Database name
       POSTGRES_USER: admin
       # POSTGRES image as specific implementation to read the password from the file
-      POSTGRES_PASSWORD: admin
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d ocr_db -U admin" ]
       interval: 10s
@@ -23,10 +25,12 @@
     depends_on:
       postgres:
         condition: service_healthy
+    secrets:
+        - POSTGRES_PASSWORD
     environment: 
       POSTGRES_USER: admin
       POSTGRES_DB: ocr_db
-      POSTGRES_PASSWORD: admin
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
   api:
     build:
       context: .
@@ -40,11 +44,23 @@
       - "8080:8080"
     volumes:
       - ./ocr_storage:/var/lib/ocr_storage
+    secrets:
+      - DI_KEY
+      - DI_ENDPOINT
+      - POSTGRES_PASSWORD
     environment:
-      DI_KEY: ${DI_KEY}
-      DI_ENDPOINT: ${DI_ENDPOINT}
-      POSTGRES_PASSWORD: admin
+      DI_KEY_FILE: /run/secrets/DI_KEY
+      DI_ENDPOINT_FILE: /run/secrets/DI_ENDPOINT
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
       OCR_STORAGE_PATH: /var/lib/ocr_storage
+
+secrets:
+  DI_KEY:
+      file: ./secrets/DI_KEY.txt
+  DI_ENDPOINT:
+      file: ./secrets/DI_ENDPOINT.txt
+  POSTGRES_PASSWORD:
+      file: ./secrets/POSTGRES_PASSWORD.txt
 
 volumes:
   pg_data:

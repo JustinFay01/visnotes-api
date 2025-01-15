@@ -24,5 +24,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 COPY ["Ocr.Data.Migrations/appsettings.json", "/app/appsettings.json"]
-COPY ["Ocr.Data.Migrations/appsettings.Development.json", "/app/appsettings.Development.json"]
 ENTRYPOINT ["dotnet", "Ocr.Data.Migrations.dll"]
