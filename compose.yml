@@ -27,7 +27,6 @@
       POSTGRES_USER: admin
       POSTGRES_DB: ocr_db
       POSTGRES_PASSWORD: admin
-      ASPNETCORE_ENVIRONMENT: Development
   api:
     build:
       context: .
@@ -45,7 +44,6 @@
       DI_KEY: ${DI_KEY}
       DI_ENDPOINT: ${DI_ENDPOINT}
       POSTGRES_PASSWORD: admin
-      ASPNETCORE_ENVIRONMENT: Development
       OCR_STORAGE_PATH: /var/lib/ocr_storage
 
 volumes:

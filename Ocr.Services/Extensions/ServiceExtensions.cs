@@ -6,32 +6,20 @@ using Ocr.Data;
 using Ocr.Services.Abstract;
 using Ocr.Services.Profiles;
 using Ocr.Services.SystemStorage;
+using Ocr.Shared.Utilities;
 
 namespace Ocr.Services.Extensions;
 
 public static class ServicesExtensions
 {
-    public static IServiceCollection UseOcrContext(this IServiceCollection services, IConfiguration config, ResolveSecret? secretResolver = null)
+    public static IServiceCollection UseOcrContext(this IServiceCollection services, IConfiguration config)
     {
-        var postgresPassword = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
-        if (string.IsNullOrEmpty(postgresPassword))
-        {
-            throw new ArgumentException("No POSTGRES_PASSWORD in Env vars");
-        }
-
-        if (secretResolver != null)
-        {
-            postgresPassword = secretResolver(postgresPassword, "POSTGRES_PASSWORD");
-        }
+        var connectionString = config.BuildConnectionString("DefaultConnection");
         
-        var connectionString = config.GetConnectionString("DefaultConnection");
-        if(string.IsNullOrEmpty(connectionString))
-        {
-            throw new ArgumentException("No DefaultConnection in appsettings.json");
-        }
-
         services.AddDbContext<OcrDbContext>(options =>
-            options.UseNpgsql(connectionString + postgresPassword));
+        {
+            options.UseNpgsql(connectionString);
+        });
 
         return services;
     }
@@ -43,7 +31,7 @@ public static class ServicesExtensions
         return services;
     }
 
-    public static IServiceCollection UseOcrInfrastructure(this IServiceCollection services, ResolveSecret? secretResolver = null)
+    public static IServiceCollection UseOcrInfrastructure(this IServiceCollection services)
     {
         var storagePath = Environment.GetEnvironmentVariable("OCR_STORAGE_PATH")
                           ?? throw new ArgumentException("No OCR_STORAGE_PATH in Env vars");
@@ -54,10 +42,10 @@ public static class ServicesExtensions
         var diEndpoint = Environment.GetEnvironmentVariable("DI_ENDPOINT")
                         ?? throw new ArgumentException("No DI_ENDPOINT in Env vars");
         
-        if (secretResolver != null)
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {
-            diKey = secretResolver(diKey, "DI_KEY");
-            diEndpoint = secretResolver(diEndpoint, "DI_ENDPOINT");
+            diKey = DockerSecretUtil.GetSecret(diKey, "DI_KEY");
+            diEndpoint = DockerSecretUtil.GetSecret(diEndpoint, "DI_ENDPOINT");
         }
 
         services.AddScoped<IDocumentIntelligenceService, DocumentIntelligenceService>(provider =>

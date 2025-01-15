@@ -39,11 +39,7 @@ void ConfigureServices()
         builder.AddDebug();
     });
 
-    ResolveSecret? resolveSecret = environmentName == "Production" 
-        ? DockerSecretUtil.GetSecret 
-        : null;
-
-    services.UseOcrContext(configuration, resolveSecret);
+    services.UseOcrContext(configuration);
 }
 
 void GetServices(ServiceProvider sp)

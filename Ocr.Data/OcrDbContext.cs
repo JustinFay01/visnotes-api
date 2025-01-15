@@ -33,8 +33,7 @@ public class OcrDbContext : DbContext
     {
         public OcrDbContext CreateDbContext(string[] args)
         {
-            var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
-                                      ?? throw new ArgumentException("No CONNECTION_STRING in Env vars");
+            const string connectionString = "Host=localhost;Database=ocr;Username=admin;Password=admin";
             
             var optionsBuilder = new DbContextOptionsBuilder<OcrDbContext>();
             optionsBuilder.UseNpgsql(connectionString);

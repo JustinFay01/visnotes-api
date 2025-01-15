@@ -190,3 +190,5 @@ dotnet ef database update -s .\Ocr.Api\ -p .\Ocr.Data\ --context OcrDbContext
 
 1. DI_KEY
 2. DI_ENDPOINT
+3. ASPNETCORE_ENVIRONMENT
+ - Development

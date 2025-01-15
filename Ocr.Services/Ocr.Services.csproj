@@ -11,12 +11,12 @@
         <PackageReference Include="Azure.AI.FormRecognizer" Version="4.1.0"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
         <PackageReference Include="Microsoft.Azure.CognitiveServices.Vision.ComputerVision" Version="7.0.1"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Ocr.Data\Ocr.Data.csproj"/>
+        <ProjectReference Include="..\Ocr.Shared\Ocr.Shared.csproj" />
     </ItemGroup>
 
 </Project>

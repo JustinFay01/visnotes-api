@@ -34,14 +34,10 @@ public class Program
         builder.Services.AddExceptionHandler<ExceptionHandler>();
 
         builder.Services.AddControllers();
-        
-        // If not in development, use Docker stack secrets
-        ResolveSecret? secretResolver = !builder.Environment.IsDevelopment() ? 
-            DockerSecretUtil.GetSecret 
-            : null;
-        
-        builder.Services.UseOcrContext(builder.Configuration, secretResolver);
-        builder.Services.UseOcrInfrastructure(secretResolver);
+
+
+        builder.Services.UseOcrContext(builder.Configuration);
+        builder.Services.UseOcrInfrastructure();
         builder.Services.UseOcrServices();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
