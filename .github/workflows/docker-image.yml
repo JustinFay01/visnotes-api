@@ -3,6 +3,10 @@ name: Build and Deploy Docker
 on:
   push:
     branches: ["main"]
+    paths-ignore:
+        - "README.md"
+        - ".github/workflows/**"
+        - "assets/**"
 
 permissions:
   packages: write
