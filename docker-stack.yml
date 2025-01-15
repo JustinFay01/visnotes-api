@@ -28,10 +28,7 @@
     environment: 
       POSTGRES_USER: admin
       POSTGRES_DB: ocr_db
-      # Can't use the docker secret directly in the environment variable
-      # Because it will just use the file path
-      POSTGRES_PASSWORD: POSTGRES_PASSWORD
-  
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
   api:
     image: justinfay501/ocr-api:${GIT_COMMIT_HASH-latest} # Image name
     networks:
@@ -51,11 +48,11 @@
       # Adding secrets will create a file in the container with the secret value
       # This name will be read by a Util class to egt the value
       # we cannot pass /run/secrets/POSTGRES_PASSWORD because it will just pass the file path
-      DI_KEY: DI_KEY
-      DI_ENDPOINT: DI_ENDPOINT
+      DI_KEY_FILE: /run/secrets/DI_KEY
+      DI_ENDPOINT_FILE: /run/secrets/DI_ENDPOINT
       # Can't use the docker secret directly in the environment variable
       # Because it will just use the file path
-      POSTGRES_PASSWORD: POSTGRES_PASSWORD
+      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
       OCR_STORAGE_PATH: /var/lib/ocr/ocr_storage    
     depends_on:
       # Swarm doesn't support adding a condition to the service yet
