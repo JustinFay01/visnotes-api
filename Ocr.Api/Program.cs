@@ -37,7 +37,7 @@ public class Program
 
 
         builder.Services.UseOcrContext(builder.Configuration);
-        builder.Services.UseOcrInfrastructure();
+        builder.Services.UseOcrInfrastructure(builder.Configuration);
         builder.Services.UseOcrServices();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

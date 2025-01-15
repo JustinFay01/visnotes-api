@@ -4,6 +4,26 @@ namespace Ocr.Shared.Utilities;
 
 public static class ConfigurationExtensions
 {
+
+    public static string BuildKey(this IConfiguration configuration, string keyName)
+    {
+        var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+
+        string key;
+        if(env == "Development")
+        {
+            key =  Environment.GetEnvironmentVariable(keyName) ?? throw new ArgumentException($"No {keyName} in appsettings.json");
+        }
+        else
+        {
+            var keyFileName = keyName + "_FILE";
+            var keyPath = Environment.GetEnvironmentVariable(keyFileName) ?? throw new ArgumentException($"No {keyFileName} in Env vars");
+            key = DockerSecretUtil.GetSecret(keyPath, keyFileName);
+        }
+
+        return key;
+    }
+    
     public static string BuildConnectionString(this IConfiguration configuration, string name)
     {
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";

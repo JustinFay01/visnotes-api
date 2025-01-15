@@ -28,7 +28,6 @@ public class DocumentIntelligenceService : IDocumentIntelligenceService
     public DocumentIntelligenceService(string diKey, string diEndpoint, ILogger<DocumentIntelligenceService> logger)
     {
         _logger = logger;
-
         _client = new DocumentAnalysisClient(new Uri(diEndpoint), new AzureKeyCredential(diKey));
     }
 
