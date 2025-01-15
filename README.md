@@ -133,7 +133,7 @@ Need to change appsettings.json postgres -> localhost
 - [x] Upload multiple files at once
 
 - [ ] Save options using Zustand
-- [x] Move notes to a separate page
+- [ ] Move notes to a separate page
 - [ ] Create a mobile friendly Notes Section
 - [ ] Add a warning when analyzing a note that has already been analyzed
 - [ ] Add a button to generate a new word cloud instead of automatically generating it
@@ -151,16 +151,15 @@ Need to change appsettings.json postgres -> localhost
 # Back End
 
 ## CI/CD
-- [x] Add way to run migrations on the database when deploying
+- [ ] Add way to run migrations on the database when deploying
 
 ## Todo
 
-- [x] Rework how we read docker secrets
+- [ ] Rework how we read docker secrets
 - [ ] Remove IFormFile from Service Layer
-- [x] Add whether or not we are running docker to determine password for database
-- [x] Move docker util to shared project
-- [x] Simplify Local development docker secrets. They don't need to be secrets...
-- [ ] Implement Read Repair when files errors are thrown use system storage
+- [ ] Add whether or not we are running docker to determine password for database
+- [ ] Move docker util to shared project
+- [ ] Simplify Local development docker secrets. They don't need to be secrets...
 
 ## DB Architecture
 **Minimum Viable Product Schema**
@@ -186,7 +185,12 @@ Need to change appsettings.json postgres -> localhost
 dotnet ef database update -s .\Ocr.Api\ -p .\Ocr.Data\ --context OcrDbContext
 ```
 
-## Local Dev Env Vars Needed
+## Env Vars Needed
 
-1. DI_KEY
-2. DI_ENDPOINT
+1. CONNECTION_STRING
+   - Used for local development, specifically needed to run migrations through the CLI
+2. POSTGRES_PASSWORD
+3. DI_KEY
+4. DI_ENDPOINT
+5. ASPNETCORE_ENVIRONMENT
+  - Set to "Development" for local development

@@ -10,7 +10,7 @@
       POSTGRES_DB: ocr_db # Database name
       POSTGRES_USER: admin
       # POSTGRES image as specific implementation to read the password from the file
-      POSTGRES_PASSWORD: admin
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d ocr_db -U admin" ]
       interval: 10s
@@ -23,11 +23,12 @@
     depends_on:
       postgres:
         condition: service_healthy
+    secrets:
+      - POSTGRES_PASSWORD
     environment: 
       POSTGRES_USER: admin
       POSTGRES_DB: ocr_db
-      POSTGRES_PASSWORD: admin
-      ASPNETCORE_ENVIRONMENT: Development
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
   api:
     build:
       context: .
@@ -41,13 +42,24 @@
       - "8080:8080"
     volumes:
       - ./ocr_storage:/var/lib/ocr_storage
+    secrets:
+        - DI_KEY
+        - DI_ENDPOINT
+        - POSTGRES_PASSWORD
     environment:
-      DI_KEY: ${DI_KEY}
-      DI_ENDPOINT: ${DI_ENDPOINT}
-      POSTGRES_PASSWORD: admin
-      ASPNETCORE_ENVIRONMENT: Development
+      DI_KEY: DI_KEY
+      DI_ENDPOINT: DI_ENDPOINT
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
       OCR_STORAGE_PATH: /var/lib/ocr_storage
+ 
 
+secrets:
+  DI_KEY:
+    file: ./secrets/DI_KEY.txt
+  DI_ENDPOINT:
+    file: ./secrets/DI_ENDPOINT.txt
+  POSTGRES_PASSWORD:
+    file: ./secrets/POSTGRES_PASSWORD.txt
 volumes:
   pg_data:
   ocr_storage:
