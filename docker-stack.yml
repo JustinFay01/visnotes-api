@@ -32,6 +32,8 @@
     deploy: # Only run one instance of the migrations
       placement:
         max_replicas_per_node: 1
+      restart_policy:
+        condition: none
   api:
     image: justinfay501/ocr-api:${GIT_COMMIT_HASH-latest} # Image name
     networks:
