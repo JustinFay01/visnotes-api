@@ -45,8 +45,8 @@ public class FileSystemStorage : IFileSystemStorage
         if (file.Length <= 0 || file.Length > MaxFileSize) throw new FileLengthInvalidException(file.Length);
         
         // Check if the file exists
-        // if (File.Exists(Path.Combine(_storagePath, file.FileName))) 
-        //     throw new FileExistsException(file.FileName);
+        if (File.Exists(Path.Combine(_storagePath, file.FileName))) 
+            throw new FileExistsException(file.FileName);
         
         try
         {

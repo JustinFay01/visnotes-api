@@ -58,7 +58,7 @@
       # Can't use the docker secret directly in the environment variable
       # Because it will just use the file path
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
-      OCR_STORAGE_PATH: /var/lib/ocr/ocr_storage    
+      OCR_STORAGE_PATH: ocr_storage:/var/lib/ocr/ocr_storage    
     depends_on:
       # Swarm doesn't support adding a condition to the service yet
       # https://github.com/docker/cli/issues/3880?reload=1
