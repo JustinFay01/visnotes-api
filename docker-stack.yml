@@ -29,6 +29,9 @@
       POSTGRES_USER: admin
       POSTGRES_DB: ocr_db
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
+    deploy: # Only run one instance of the migrations
+      placement:
+        max_replicas_per_node: 1
   api:
     image: justinfay501/ocr-api:${GIT_COMMIT_HASH-latest} # Image name
     networks:
