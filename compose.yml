@@ -52,7 +52,7 @@
       DI_KEY_FILE: /run/secrets/DI_KEY
       DI_ENDPOINT_FILE: /run/secrets/DI_ENDPOINT
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
-      OCR_STORAGE_PATH: /var/lib/ocr_storage
+      OCR_STORAGE_PATH: ocr_storage:/var/lib/ocr_storage
 
 secrets:
   DI_KEY:

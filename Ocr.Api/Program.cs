@@ -1,3 +1,7 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Ocr.Api.Auth;
 using Ocr.Api.ExceptionHandlers;
 using Ocr.Services.Abstract;
 using Ocr.Services.Extensions;
@@ -10,6 +14,18 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        // Program.cs
+        var domain = $"https://{builder.Configuration["Auth0:Domain"]}/";
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.Authority = domain;
+            options.Audience = builder.Configuration["Auth0:Audience"];
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                NameClaimType = ClaimTypes.NameIdentifier
+            };
+        });
 
         // Allow cors
         var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -25,7 +41,14 @@ public class Program
         });
 
         // Add services to the container.
-        builder.Services.AddAuthorization();
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("read:notes", policy => policy.Requirements.Add(new 
+                HasScopeRequirement("read:notes", domain)));
+            
+            options.AddPolicy("write:notes", policy => policy.Requirements.Add(new
+                HasScopeRequirement("write:notes", domain)));
+        });
 
         builder.Services.AddExceptionHandler<FileConflictExceptionHandler>();
         builder.Services.AddExceptionHandler<ArgumentExceptionHandler>();
@@ -60,6 +83,7 @@ public class Program
         // Needs to be before UseAuthorization
         app.UseCors(myAllowSpecificOrigins);
 
+        app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
         app.Run();

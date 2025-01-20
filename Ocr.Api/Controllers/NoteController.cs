@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Ocr.Services;
 
 namespace Ocr.Api.Controllers;
@@ -19,6 +20,7 @@ public class NoteController : ControllerBase
     // Notes
 
     [HttpGet]
+    [Authorize("read:notes")]
     public async Task<IActionResult> GetNotes()
     {
         _logger.LogInformation("Call received to get all notes at {time}", DateTime.Now);
@@ -27,6 +29,7 @@ public class NoteController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize("write:notes")]
     public async Task<IActionResult> CreateNote()
     {
         if(!Request.Form.Files.Any())
@@ -43,6 +46,7 @@ public class NoteController : ControllerBase
     // Notes/{id}
 
     [HttpGet("{id}")]
+    [Authorize("read:notes")]
     public async Task<IActionResult> GetNoteById(Guid id)
     {
         var note = await _noteService.GetNoteByIdAsync(id);
@@ -51,6 +55,7 @@ public class NoteController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize("write:notes")]
     public async Task<IActionResult> DeleteNoteById(Guid id)
     {
         await _noteService.DeleteNoteByIdAsync(id);
@@ -59,8 +64,9 @@ public class NoteController : ControllerBase
     }
 
     // Notes/{id}/analyses
-
+    
     [HttpGet("{id}/analyses")]
+    [Authorize("read:notes")]
     public async Task<IActionResult> GetAnalysesByNoteId(Guid id)
     {
         var analyses = await _noteService.GetAnalysesByNoteIdAsync(id);
@@ -69,6 +75,7 @@ public class NoteController : ControllerBase
     }
 
     [HttpPost("{id}/analyses")]
+    [Authorize("write:notes")]
     public async Task<IActionResult> AnalyzeNoteById(Guid id)
     {
         var analysis = await _noteService.CreateAnalysisByNoteIdAsync(id);
