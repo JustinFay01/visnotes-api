@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
 namespace Ocr.Api.Auth;
-
-// HasScopeHandler.cs
-
 public class HasScopeHandler : AuthorizationHandler<HasScopeRequirement>
 {
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, HasScopeRequirement requirement)

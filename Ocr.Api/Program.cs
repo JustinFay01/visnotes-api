@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Ocr.Api.Auth;
 using Ocr.Api.ExceptionHandlers;
@@ -49,6 +50,8 @@ public class Program
             options.AddPolicy("write:notes", policy => policy.Requirements.Add(new
                 HasScopeRequirement("write:notes", domain)));
         });
+        
+        builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
 
         builder.Services.AddExceptionHandler<FileConflictExceptionHandler>();
         builder.Services.AddExceptionHandler<ArgumentExceptionHandler>();
