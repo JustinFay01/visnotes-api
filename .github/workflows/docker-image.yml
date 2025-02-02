@@ -4,9 +4,9 @@ on:
   push:
     branches: ["main"]
     paths-ignore:
-        - "README.md"
-        - ".github/workflows/**"
-        - "assets/**"
+      - "README.md"
+      - ".github/workflows/**"
+      - "assets/**"
 
 permissions:
   packages: write
@@ -62,7 +62,6 @@ jobs:
           name: ocr-api
           file: docker-stack.yml
           host: eremos.cloud
-          user: deploy-ocr-api
+          user: deploy-visnotes
           ssh_key: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
           env_file: ./envfile
-    
