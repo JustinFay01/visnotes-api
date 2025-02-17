@@ -47,7 +47,7 @@
       - "traefik.http.services.api.loadbalancer.server.port=8080"
 
       # Data Dog Log Integration
-      - com.datadoghq.ad.logs: '[{"source": "dotnet-api" , "service": "api"}]'
+      - 'com.datadoghq.ad.logs=[{"source": "dotnet-api" , "service": "api"}]'
     secrets:
       - DI_KEY
       - DI_ENDPOINT
