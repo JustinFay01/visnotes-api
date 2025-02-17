@@ -13,7 +13,7 @@
       # POSTGRES image as specific implementation to read the password from the file
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d ocr_db -U admin" ]
+      test: ["CMD-SHELL", "pg_isready -d ocr_db -U admin"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,7 +25,7 @@
       - postgres
     secrets:
       - POSTGRES_PASSWORD
-    environment: 
+    environment:
       POSTGRES_USER: admin
       POSTGRES_DB: ocr_db
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
@@ -45,6 +45,9 @@
       - "traefik.http.routers.api.entrypoints=websecure"
       - "traefik.http.routers.api.tls.certresolver=myresolver"
       - "traefik.http.services.api.loadbalancer.server.port=8080"
+
+      # Data Dog Log Integration
+      - com.datadoghq.ad.logs: '[{"source": "dotnet-api" , "service": "api"}]'
     secrets:
       - DI_KEY
       - DI_ENDPOINT
@@ -58,7 +61,7 @@
       # Can't use the docker secret directly in the environment variable
       # Because it will just use the file path
       POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
-      OCR_STORAGE_PATH: ocr_storage:/var/lib/ocr/ocr_storage    
+      OCR_STORAGE_PATH: ocr_storage:/var/lib/ocr/ocr_storage
     depends_on:
       # Swarm doesn't support adding a condition to the service yet
       # https://github.com/docker/cli/issues/3880?reload=1
@@ -78,7 +81,7 @@ secrets:
     external: true
   DI_ENDPOINT:
     external: true
-    
+
 volumes:
   pg_data:
   ocr_storage:
