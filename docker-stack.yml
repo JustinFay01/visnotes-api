@@ -1,22 +1,22 @@
 ﻿services:
-  postgres: # DNS resolves to this container name NOT the image or `container_name`
-    image: postgres
-    networks:
-      - ocr-net
-    volumes:
-      - pg_data:/var/lib/ocr/postgresql/data
-    secrets:
-      - POSTGRES_PASSWORD
-    environment:
-      POSTGRES_DB: ocr_db # Database name
-      POSTGRES_USER: admin
-      # POSTGRES image as specific implementation to read the password from the file
-      POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d ocr_db -U admin"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+  # postgres: # DNS resolves to this container name NOT the image or `container_name`
+  #   image: postgres
+  #   networks:
+  #     - ocr-net
+  #   volumes:
+  #     - pg_data:/var/lib/ocr/postgresql/data
+  #   secrets:
+  #     - POSTGRES_PASSWORD
+  #   environment:
+  #     POSTGRES_DB: ocr_db # Database name
+  #     POSTGRES_USER: admin
+  #     # POSTGRES image as specific implementation to read the password from the file
+  #     POSTGRES_PASSWORD_FILE: /run/secrets/POSTGRES_PASSWORD
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -d ocr_db -U admin"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
   migrations:
     image: justinfay501/ocr-migrations:${GIT_COMMIT_HASH-latest} # Image name
     networks:
